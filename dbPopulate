@@ -1,0 +1,21 @@
+
+app.get("/hotel", async (_req, res) => {
+  const hotel= await Hotel.create();
+
+  hotel.name = "Driven Resort";
+  hotel.image = "https://media-cdn.tripadvisor.com/media/photo-m/1280/1c/f8/c9/6f/japaratinga-lounge-resort.jpg";
+  await hotel.save();
+  hotel.rooms = [];
+  for(let i=0; i<10; i++) {
+    const room = new Room();
+    room.number = `10${i}`;
+    room.roomVacancies = (i%3)+1;
+    room.ocuppiedVancies = 0;
+    room.hotelId = hotel.id;
+    hotel.rooms.push(room);
+  }
+  Room.save(hotel.rooms);
+  console.log(hotel);
+  
+  res.send("OK!");
+});
