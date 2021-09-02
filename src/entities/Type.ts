@@ -15,6 +15,6 @@ export default class Type extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToOne(() => Ticket, (ticket: Ticket) => ticket.type, { eager: true })
+  @OneToOne(() => Ticket, (ticket: Ticket) => ticket.type)
   ticket: Ticket;
 }
