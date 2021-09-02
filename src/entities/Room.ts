@@ -20,4 +20,18 @@ export default class Room extends BaseEntity {
 
   @ManyToOne(() => Hotel, hotel => hotel.rooms)
   hotel: Hotel;
+
+  freeVacancies() {
+    return this.roomVacancies - this.ocuppiedVancies;
+  }
+
+  type() {
+    if(this.roomVacancies ===1) {
+      return "single";
+    }
+    if(this.roomVacancies ===2) {
+      return "double";
+    }
+    return "triple";
+  }
 }

@@ -12,6 +12,24 @@ export default class Hotel extends BaseEntity {
   @Column()
   image: string;
 
-  @OneToMany(() => Room, room => room.hotel)
+  @OneToMany(() => Room, room => room.hotel, { eager: true })
   rooms: Room[];
+
+  totalVacancies() {
+    return this.rooms.reduce((acc, room) => {
+      return acc + room.freeVacancies();
+    }, 0);
+  }
+
+  roomsTypes() {
+    const types = {
+      single: false,
+      double: false,
+      triple: false
+    };
+    this.rooms.forEach(room => {
+      types[room.type()] = true;
+    });
+    return types;
+  }
 }
