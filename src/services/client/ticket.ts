@@ -6,7 +6,8 @@ export async function getTickets() {
   });
 
   const result = tickets.map((item) => ({
-    price: item.price,
+    id: item.id,
+    price: item.type.price,
     name: item.type.name,
   }));
 

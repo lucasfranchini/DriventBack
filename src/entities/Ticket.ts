@@ -14,9 +14,6 @@ export default class Ticket extends BaseEntity {
   id: number;
 
   @Column()
-  price: number;
-
-  @Column()
   typeId: number;
 
   @OneToOne(() => Type, (type: Type) => type.ticket)
