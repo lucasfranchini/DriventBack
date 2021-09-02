@@ -27,9 +27,19 @@ export default class Hotel extends BaseEntity {
       double: false,
       triple: false
     };
+    const arrayTypes: string[] = [];
     this.rooms.forEach(room => {
       types[room.type()] = true;
     });
-    return types;
+    if(types.single) {
+      arrayTypes.push("single");
+    }
+    if(types.double) {
+      arrayTypes.push("double");
+    }
+    if(types.triple) {
+      arrayTypes.push("triple");
+    }
+    return arrayTypes;
   }
 }
