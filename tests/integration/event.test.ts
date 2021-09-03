@@ -14,6 +14,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await clearDatabase();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   settings = await createBasicSettings();
 });
 
