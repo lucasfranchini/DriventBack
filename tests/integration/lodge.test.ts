@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app, { init } from "../../src/app";
-import { createLodge, truncateLodgeDatabase } from "../factories/lodgeFactory";
+import { createLodge, truncateLodgeTable } from "../factories/lodgeFactory";
 import { clearDatabase, endConnection } from "../utils/database";
 
 const agent = supertest(app);
@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await truncateLodgeDatabase();
+  await truncateLodgeTable();
   await clearDatabase();
 });
 

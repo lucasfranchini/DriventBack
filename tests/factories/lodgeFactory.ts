@@ -10,7 +10,7 @@ export async function createLodge() {
   return lodgeOption;
 }
 
-export async function truncateLodgeDatabase() {
+export async function truncateLodgeTable() {
   const connection = getConnection();
   await connection.query("TRUNCATE lodges RESTART IDENTITY");
 }

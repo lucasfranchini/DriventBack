@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app, { init } from "../../src/app";
-import { createLodge, truncateLodgeDatabase } from "../factories/lodgeFactory";
+import { createModality, truncateModalitiesTable } from "../factories/modalityFactory";
 import { clearDatabase, endConnection } from "../utils/database";
 
 const agent = supertest(app);
@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await truncateLodgeDatabase();
+  await truncateModalitiesTable();
   await clearDatabase();
 });
 
@@ -19,19 +19,19 @@ afterAll(async () => {
   await endConnection();
 });
 
-describe("GET /lodges", () => {
-  it("should return the lodges options", async () => {
-    await createLodge();
-    const response = await agent.get("/lodges");
+describe("GET /modalities", () => {
+  it("should return the modalities options", async () => {
+    await createModality();
+    const response = await agent.get("/modalities");
     expect(response.body[0]).toEqual({
       id: 1, 
-      type: "Com Hotel",
-      price: 250,
+      type: "Online",
+      price: 100
     });
   });
 
-  it("should return status 204 for no lodges options in database", async () => {
-    const response = await agent.get("/lodges");
+  it("should return status 204 for no modalities options in database", async () => {
+    const response = await agent.get("/modalities");
     expect(response.status).toEqual(204);
   });
 });
