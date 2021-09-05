@@ -3,7 +3,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
 } from "typeorm";
+import Booking from "./Booking";
 
 @Entity("lodges")
 export default class Lodge extends BaseEntity {
@@ -15,4 +17,7 @@ export default class Lodge extends BaseEntity {
 
   @Column()
   price: number;
+
+  @OneToMany(() => Booking, (booking: Booking) => booking.lodge)
+  booking: Booking;
 }
