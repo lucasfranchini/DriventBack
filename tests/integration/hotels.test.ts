@@ -46,3 +46,22 @@ describe("GET /hotels", () => {
     expect(response.statusCode).toEqual(httpStatus.OK);
   });
 });
+
+describe("GET /hotels/:id", () => {
+  it("should return status 401 for invalid Token", async () => {
+    const response = await agent.get("/hotels/1").set("authorization", "lalala");
+    expect(response.statusCode).toEqual(httpStatus.UNAUTHORIZED);
+  });
+  it("should return an array with all hotels for valid token", async () => {
+    const hotel = await createHotel();
+    const response = await agent.get(`/hotels/${hotel.id}`).set("authorization", `Bearer ${session.token}`);
+
+    expect(response.body).toEqual(hotel);
+  });
+  it("should return status 200 for valid token", async () => {
+    const hotel = await createHotel();
+    const response = await agent.get(`/hotels/${hotel.id}`).set("authorization", `Bearer ${session.token}`);
+    expect(response.statusCode).toEqual(httpStatus.OK);
+  });
+});
+
