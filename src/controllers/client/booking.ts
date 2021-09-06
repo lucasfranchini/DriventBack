@@ -13,5 +13,6 @@ export async function saveBookingInfo(req: Request, res: Response) {
 export async function getBookingInfo(req: Request, res: Response) {
   const userId = req.user.id;
   const result = await bookingService.getUserBooking(userId);
+  if (!result) return res.sendStatus(401);
   res.send(result).status(200);
 }

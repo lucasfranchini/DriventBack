@@ -13,7 +13,7 @@ import Lodge from "./Lodge";
 import BookingData from "@/interfaces/booking";
 import ConflictError from "@/errors/ConflictError";
 import UnprocessableEntity from "@/errors/UnprocessableEntity";
-import { textSpanEnd } from "typescript";
+import Unauthorized from "@/errors/Unauthorized";
 
 @Entity("bookings")
 export default class Booking extends BaseEntity {
@@ -35,10 +35,15 @@ export default class Booking extends BaseEntity {
   @OneToOne(() => User, (user: User) => user.booking)
   user: User;
 
-  @ManyToOne(() => Modality, (modality: Modality) => modality.booking)
+  //timestamp
+  //isPayed
+
+  @ManyToOne(() => Modality, (modality: Modality) => modality.booking, {
+    eager: true,
+  })
   modality: Modality;
 
-  @ManyToOne(() => Lodge, (lodge: Lodge) => lodge.booking)
+  @ManyToOne(() => Lodge, (lodge: Lodge) => lodge.booking, { eager: true })
   lodge: Lodge;
 
   static async createBooking(data: BookingData) {
