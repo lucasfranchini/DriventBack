@@ -13,7 +13,7 @@ export default class Room extends BaseEntity {
   roomVacancies: number;
 
   @Column()
-  ocuppiedVancies: number;
+  ocuppiedVacancies: number;
 
   @Column()
   hotelId: number;
@@ -22,7 +22,7 @@ export default class Room extends BaseEntity {
   hotel: Hotel;
 
   freeVacancies() {
-    return this.roomVacancies - this.ocuppiedVancies;
+    return this.roomVacancies - this.ocuppiedVacancies;
   }
 
   type() {
