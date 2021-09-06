@@ -15,6 +15,10 @@ export default class Hotel extends BaseEntity {
   @OneToMany(() => Room, room => room.hotel, { eager: true })
   rooms: Room[];
 
+  static async getRoomsOrdered(id: number) {
+    return await this.createQueryBuilder("hotel").leftJoinAndSelect("hotel.rooms", "rooms").where("hotel.id = :id", { id }).orderBy("rooms.id", "ASC").getOne();
+  }
+
   totalVacancies() {
     return this.rooms.reduce((acc, room) => {
       return acc + room.freeVacancies();

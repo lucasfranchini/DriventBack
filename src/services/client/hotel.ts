@@ -12,7 +12,7 @@ export async function get() {
 }
 
 export async function getOne(id: number) {
-  const hotel  = await Hotel.findOne(id);
+  const hotel  = await Hotel.getRoomsOrdered(id);
   if(hotel===undefined) {
     throw new NotFoundError();
   }
