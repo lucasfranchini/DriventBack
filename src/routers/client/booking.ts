@@ -14,4 +14,6 @@ router.post(
   controller.saveBookingInfo
 );
 
+router.get("/", controller.getBookingInfo);
+
 export default router;

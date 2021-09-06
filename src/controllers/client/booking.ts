@@ -9,3 +9,9 @@ export async function saveBookingInfo(req: Request, res: Response) {
   await bookingService.createNewBooking(bookingData);
   res.sendStatus(201);
 }
+
+export async function getBookingInfo(req: Request, res: Response) {
+  const userId = req.user.id;
+  const result = await bookingService.getUserBooking(userId);
+  res.send(result).status(200);
+}
