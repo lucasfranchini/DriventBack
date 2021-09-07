@@ -1,4 +1,5 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import HotelReservation from "./HotelReservation";
 import Room from "./Room";
 
 @Entity("hotels")
@@ -14,6 +15,9 @@ export default class Hotel extends BaseEntity {
 
   @OneToMany(() => Room, room => room.hotel, { eager: true })
   rooms: Room[];
+
+  @OneToMany(() => HotelReservation, hotelReservation => hotelReservation.hotel)
+  hotelReservations: HotelReservation[];
 
   totalVacancies() {
     return this.rooms.reduce((acc, room) => {

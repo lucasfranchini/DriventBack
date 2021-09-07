@@ -1,5 +1,6 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import Hotel from "./Hotel";
+import HotelReservation from "./HotelReservation";
 
 @Entity("rooms")
 export default class Room extends BaseEntity {
@@ -20,6 +21,9 @@ export default class Room extends BaseEntity {
 
   @ManyToOne(() => Hotel, hotel => hotel.rooms)
   hotel: Hotel;
+
+  @OneToMany(() => HotelReservation, hotelReservation => hotelReservation.room)
+  hotelReservations: HotelReservation[];
 
   freeVacancies() {
     return this.roomVacancies - this.ocuppiedVancies;
