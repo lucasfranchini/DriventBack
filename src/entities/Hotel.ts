@@ -1,5 +1,6 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import Room from "./Room";
+import HotelReservation from "@/entities/HotelReservation";
+import Room from "@/entities/Room";
 
 @Entity("hotels")
 export default class Hotel extends BaseEntity {
@@ -14,6 +15,9 @@ export default class Hotel extends BaseEntity {
 
   @OneToMany(() => Room, room => room.hotel, { eager: true })
   rooms: Room[];
+
+  @OneToMany(() => HotelReservation, hotelReservations => hotelReservations.hotel)
+  hotelReservations: HotelReservation[];
 
   static async getRoomsOrdered(id: number) {
     return await this.createQueryBuilder("hotel").leftJoinAndSelect("hotel.rooms", "rooms").where("hotel.id = :id", { id }).orderBy("rooms.id", "ASC").getOne();
