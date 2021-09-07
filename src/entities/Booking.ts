@@ -8,7 +8,6 @@ import {
 } from "typeorm";
 import User from "./User";
 import Modality from "./Modality";
-import LodgeModality from "./LodgeModality";
 import Lodge from "./Lodge";
 import BookingData from "@/interfaces/booking";
 import ConflictError from "@/errors/ConflictError";
@@ -35,9 +34,6 @@ export default class Booking extends BaseEntity {
   @OneToOne(() => User, (user: User) => user.booking)
   user: User;
 
-  //timestamp
-  //isPayed
-
   @ManyToOne(() => Modality, (modality: Modality) => modality.booking, {
     eager: true,
   })
@@ -63,25 +59,14 @@ export default class Booking extends BaseEntity {
     if (!existingModality) {
       throw new UnprocessableEntity("Tipo de modalidade não existente");
     }
-    if (data.lodgeId) {
-      const existingLodgeModalityRelation = await LodgeModality.findOne({
-        where: { lodgeId: data.lodgeId, modalityId: data.modalityId },
-      });
-
-      if (!existingLodgeModalityRelation) {
-        throw new UnprocessableEntity("Relacionamento não existente");
-      }
-    }
-    if (!data.lodgeId) {
-      const existingModalityRelation = await LodgeModality.findOne({
-        where: { modalityId: data.modalityId },
-      });
-      if (existingModalityRelation) {
-        throw new UnprocessableEntity("Relacionamento não existente");
-      }
-    }
     const newBooking = this.create(data);
     await newBooking.save();
     return newBooking;
+  }
+
+  static async getBooking(userId: number) {
+    const booking = await this.findOne({ where: { userId } });
+    if (!booking) throw new Unauthorized();
+    return booking;
   }
 }

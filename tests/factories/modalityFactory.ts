@@ -13,6 +13,6 @@ export async function createModality() {
 export async function truncateModalitiesTable() {
   const connection = getConnection();
   await connection.query(
-    "TRUNCATE bookings, lodges_modalities, modalities RESTART IDENTITY"
+    "TRUNCATE bookings, modalities RESTART IDENTITY"
   );
 }

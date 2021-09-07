@@ -6,7 +6,6 @@ import {
   OneToMany,
 } from "typeorm";
 import Booking from "./Booking";
-import LodgeModality from "./LodgeModality";
 
 @Entity("lodges")
 export default class Lodge extends BaseEntity {
@@ -21,10 +20,4 @@ export default class Lodge extends BaseEntity {
 
   @OneToMany(() => Booking, (booking: Booking) => booking.lodge)
   booking: Booking[];
-
-  @OneToMany(
-    () => LodgeModality,
-    (lodgeModality: LodgeModality) => lodgeModality.lodge
-  )
-  lodgeModality: LodgeModality[];
 }

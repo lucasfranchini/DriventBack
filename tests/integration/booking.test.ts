@@ -35,6 +35,7 @@ describe("GET /bookings", () => {
       where: { id: 1 },
       relations: ["modality", "lodge"],
     });
+    console.log(usersBooking);
     const response = await agent
       .get("/bookings")
       .set("authorization", `Bearer ${token}`);
@@ -47,11 +48,19 @@ describe("GET /bookings", () => {
     await createBooking(data);
     const response = await agent
       .get("/bookings")
-      .set("authorization", `Bearer token_suspeito`);
+      .set("authorization", "Bearer token_suspeito");
     expect(response.status).toEqual(401);
   });
 });
 
 describe("POST /bookings", () => {
-  it("should create booking and return 201 for valid params", async () => {});
+  it("should create booking and return 201 for valid params", async () => {
+    const token = createDataAndReturnToken();
+    const body = { modalityId: 1, lodgeId: 1, value: 600 };
+    const response = await agent
+      .post("/bookings")
+      .send(body)
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(201);
+  });
 });

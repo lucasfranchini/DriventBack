@@ -6,7 +6,6 @@ export async function createNewBooking(bookingData: BookingData) {
 }
 
 export async function getUserBooking(userId: number) {
-  const booking = await Booking.findOne({ where: { userId } });
-  if (!booking) return false;
-  return booking;
+  const result = await Booking.getBooking(userId);
+  return result;
 }

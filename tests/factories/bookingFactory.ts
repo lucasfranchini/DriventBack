@@ -2,7 +2,6 @@ import { getConnection } from "typeorm";
 import { CreateSession } from "../factories/userFactory";
 import Modality from "../../src/entities/Modality";
 import Lodge from "../../src/entities/Lodge";
-import LodgeModality from "../../src/entities/LodgeModality";
 import Booking from "../../src/entities/Booking";
 import BookingData from "../../src/interfaces/booking";
 
@@ -14,7 +13,7 @@ export async function truncateBookingTable() {
 export async function truncateTables() {
   const connection = getConnection();
   await connection.query(
-    "TRUNCATE bookings, lodges_modalities, sessions, users, modalities, lodges RESTART IDENTITY"
+    "TRUNCATE bookings, sessions, users, modalities, lodges RESTART IDENTITY"
   );
 }
 
@@ -30,10 +29,6 @@ export async function createDataAndReturnToken() {
       price: 250,
     },
     { type: "Sem Hotel", price: 0 },
-  ]);
-  await LodgeModality.insert([
-    { modalityId: 1, lodgeId: 1 },
-    { modalityId: 1, lodgeId: 2 },
   ]);
   return session.token;
 }

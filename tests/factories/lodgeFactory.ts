@@ -13,6 +13,6 @@ export async function createLodge() {
 export async function truncateLodgeTable() {
   const connection = getConnection();
   await connection.query(
-    "TRUNCATE bookings, lodges_modalities, lodges RESTART IDENTITY"
+    "TRUNCATE bookings, lodges RESTART IDENTITY"
   );
 }
