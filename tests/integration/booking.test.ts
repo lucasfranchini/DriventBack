@@ -35,7 +35,6 @@ describe("GET /bookings", () => {
       where: { id: 1 },
       relations: ["modality", "lodge"],
     });
-    console.log(usersBooking);
     const response = await agent
       .get("/bookings")
       .set("authorization", `Bearer ${token}`);
@@ -55,12 +54,58 @@ describe("GET /bookings", () => {
 
 describe("POST /bookings", () => {
   it("should create booking and return 201 for valid params", async () => {
-    const token = createDataAndReturnToken();
+    const token = await createDataAndReturnToken();
     const body = { modalityId: 1, lodgeId: 1, value: 600 };
     const response = await agent
       .post("/bookings")
       .send(body)
       .set("authorization", `Bearer ${token}`);
+    const result = await Booking.find();
+    expect (result.length).toEqual(1);  
     expect(response.status).toEqual(201);
+  });
+
+  it("should create booking and return 401 for invalid token", async () => {
+    await createDataAndReturnToken();
+    const body = { modalityId: 1, lodgeId: 1, value: 600 };
+    const response = await agent
+      .post("/bookings")
+      .send(body)
+      .set("authorization", "Bearer invalid_token");
+    expect(response.status).toEqual(401);
+  });
+
+  it("should create booking and return 422 for invalid lodge", async () => {
+    const token = await createDataAndReturnToken();
+    const body = { modalityId: 1, lodgeId: 8001, value: 600 };
+    const response = await agent
+      .post("/bookings")
+      .send(body)
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(422);
+  });
+
+  it("should create booking and return 422 for invalid modality", async () => {
+    const token = await createDataAndReturnToken();
+    const body = { modalityId: 8001, lodgeId: 1, value: 600 };
+    const response = await agent
+      .post("/bookings")
+      .send(body)
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(422);
+  });
+
+  it("should create booking and return 201 for valid params", async () => {
+    const token = await createDataAndReturnToken();
+    const body = { modalityId: 1, lodgeId: 1, value: 600 };
+    await agent
+      .post("/bookings")
+      .send(body)
+      .set("authorization", `Bearer ${token}`);
+    const response = await agent
+      .post("/bookings")
+      .send(body)
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(409);
   });
 });
