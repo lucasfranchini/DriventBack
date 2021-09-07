@@ -65,7 +65,7 @@ describe("POST /bookings", () => {
     expect(response.status).toEqual(201);
   });
 
-  it("should create booking and return 401 for invalid token", async () => {
+  it("should return 401 for invalid token", async () => {
     await createDataAndReturnToken();
     const body = { modalityId: 1, lodgeId: 1, value: 600 };
     const response = await agent
@@ -75,7 +75,7 @@ describe("POST /bookings", () => {
     expect(response.status).toEqual(401);
   });
 
-  it("should create booking and return 422 for invalid lodge", async () => {
+  it("should return 422 for invalid lodge", async () => {
     const token = await createDataAndReturnToken();
     const body = { modalityId: 1, lodgeId: 8001, value: 600 };
     const response = await agent
@@ -85,7 +85,7 @@ describe("POST /bookings", () => {
     expect(response.status).toEqual(422);
   });
 
-  it("should create booking and return 422 for invalid modality", async () => {
+  it("should return 422 for invalid modality", async () => {
     const token = await createDataAndReturnToken();
     const body = { modalityId: 8001, lodgeId: 1, value: 600 };
     const response = await agent
@@ -95,7 +95,7 @@ describe("POST /bookings", () => {
     expect(response.status).toEqual(422);
   });
 
-  it("should create booking and return 201 for valid params", async () => {
+  it("should return 409 for alreay registered user", async () => {
     const token = await createDataAndReturnToken();
     const body = { modalityId: 1, lodgeId: 1, value: 600 };
     await agent
