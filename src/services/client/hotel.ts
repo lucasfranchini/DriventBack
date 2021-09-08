@@ -1,4 +1,6 @@
 import Hotel from "@/entities/Hotel";
+import HotelReservation from "@/entities/HotelReservation";
+import ConflictError from "@/errors/ConflictError";
 import NotFoundError from "@/errors/NotFoundError";
 import HotelInfo from "@/interfaces/hotelInfo";
 
@@ -17,4 +19,11 @@ export async function getOne(id: number) {
     throw new NotFoundError();
   }
   return hotel;
+}
+
+export async function ReserveHotelRoom(hotelId: number, roomId: number, userId: number) {
+  const hotel = await Hotel.getWithSpecifiedRoom(hotelId, roomId);
+  if(!hotel || hotel.rooms.length === 0) throw new NotFoundError();
+  if(hotel.rooms[0].freeVacancies() === 0) throw new ConflictError("room is full");
+  const newHotelReservation = HotelReservation.create({ HotelId, roomId, userId });
 }

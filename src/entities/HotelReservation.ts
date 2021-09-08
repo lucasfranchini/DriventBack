@@ -15,7 +15,7 @@ export default class HotelReservation extends BaseEntity {
   hotel: Hotel;
 
   @Column()
-  UserId: number;
+  userId: number;
 
   @OneToOne(() => User, user => user.hotelReservation)
   user: User;

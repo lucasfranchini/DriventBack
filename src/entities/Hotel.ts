@@ -20,7 +20,18 @@ export default class Hotel extends BaseEntity {
   hotelReservations: HotelReservation[];
 
   static async getRoomsOrdered(id: number) {
-    return await this.createQueryBuilder("hotel").leftJoinAndSelect("hotel.rooms", "rooms").where("hotel.id = :id", { id }).orderBy("rooms.id", "ASC").getOne();
+    return await this.createQueryBuilder("hotel")
+      .leftJoinAndSelect("hotel.rooms", "rooms")
+      .where("hotel.id = :id", { id })
+      .orderBy("rooms.id", "ASC")
+      .getOne();
+  }
+
+  static async getWithSpecifiedRoom(hotelId: number, roomId: number) {
+    return await this.createQueryBuilder("hotel")
+      .leftJoinAndSelect("hotel.rooms", "rooms", "rooms.id = :roomId", { roomId })
+      .where("hotel.id = :hotelId", { hotelId })
+      .getOne();
   }
 
   totalVacancies() {
