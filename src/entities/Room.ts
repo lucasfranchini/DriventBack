@@ -25,6 +25,11 @@ export default class Room extends BaseEntity {
   @OneToMany(() => HotelReservation, hotelReservations => hotelReservations.hotel)
   hotelReservations: HotelReservation[];
 
+  async incrementOcuppiedVacancies() {
+    this.ocuppiedVacancies++;
+    await this.save();
+  }
+
   freeVacancies() {
     return this.roomVacancies - this.ocuppiedVacancies;
   }

@@ -25,5 +25,7 @@ export async function ReserveHotelRoom(hotelId: number, roomId: number, userId: 
   const hotel = await Hotel.getWithSpecifiedRoom(hotelId, roomId);
   if(!hotel || hotel.rooms.length === 0) throw new NotFoundError();
   if(hotel.rooms[0].freeVacancies() === 0) throw new ConflictError("room is full");
-  const newHotelReservation = HotelReservation.create({ HotelId, roomId, userId });
+  const newHotelReservation = HotelReservation.create({ hotelId, roomId, userId });
+  await newHotelReservation.save();
+  await hotel.rooms[0].incrementOcuppiedVacancies();
 }
