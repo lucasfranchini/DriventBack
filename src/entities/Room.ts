@@ -30,6 +30,11 @@ export default class Room extends BaseEntity {
     await this.save();
   }
 
+  async decrementOcuppiedVacancies() {
+    this.ocuppiedVacancies--;
+    await this.save();
+  }
+
   freeVacancies() {
     return this.roomVacancies - this.ocuppiedVacancies;
   }

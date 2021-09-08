@@ -27,9 +27,11 @@ export default class Hotel extends BaseEntity {
       .getOne();
   }
 
-  static async getWithSpecifiedRoom(hotelId: number, roomId: number) {
+  static async getWithSpecifiedRoomAndSpecifiedReservation(hotelId: number, roomId: number, userId: number) {
     return await this.createQueryBuilder("hotel")
       .leftJoinAndSelect("hotel.rooms", "rooms", "rooms.id = :roomId", { roomId })
+      .leftJoinAndSelect("hotel.hotelReservations", "hotelReservations", "hotelReservations.userId = :userId", { userId })
+      .leftJoinAndSelect("hotelReservations.room", "reservationRoom")
       .where("hotel.id = :hotelId", { hotelId })
       .getOne();
   }
