@@ -2,6 +2,7 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne } from "ty
 import bcrypt from "bcrypt";
 import EmailNotAvailableError from "@/errors/EmailNotAvailable";
 import HotelReservation from "@/entities/HotelReservation";
+import Booking from "./Booking";
 
 @Entity("users")
 export default class User extends BaseEntity {
@@ -19,6 +20,9 @@ export default class User extends BaseEntity {
 
   @OneToOne(() => HotelReservation, hotelReservation => hotelReservation.user)
   hotelReservation: HotelReservation;
+
+  @OneToOne(() => Booking, (booking: Booking) => booking.user)
+  booking: Booking;
 
   static async createNew(email: string, password: string) {
     await this.validateDuplicateEmail(email);

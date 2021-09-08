@@ -4,7 +4,7 @@ import { getConnection } from "typeorm";
 export async function createModality() {
   const modalityOption = Modality.create({
     type: "Online",
-    price: 100
+    price: 100,
   });
   await modalityOption.save();
   return modalityOption;
@@ -12,5 +12,7 @@ export async function createModality() {
 
 export async function truncateModalitiesTable() {
   const connection = getConnection();
-  await connection.query("TRUNCATE modalities RESTART IDENTITY");
+  await connection.query(
+    "TRUNCATE bookings, modalities RESTART IDENTITY"
+  );
 }
