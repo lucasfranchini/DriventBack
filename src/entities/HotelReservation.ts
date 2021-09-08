@@ -9,13 +9,13 @@ export default class HotelReservation extends BaseEntity {
   id: number;
 
   @Column()
-  HotelId: number;
+  hotelId: number;
 
   @ManyToOne(() => Hotel, hotel => hotel.hotelReservations)
   hotel: Hotel;
 
   @Column()
-  UserId: number;
+  userId: number;
 
   @OneToOne(() => User, user => user.hotelReservation)
   user: User;
