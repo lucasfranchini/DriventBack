@@ -1,8 +1,8 @@
 import faker from "faker";
 import jwt from "jsonwebtoken";
-
 import User from "../../src/entities/User";
 import Session from "../../src/entities/Session";
+
 
 export async function createUser() {
   const user = User.create({
