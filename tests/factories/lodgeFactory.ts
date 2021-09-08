@@ -4,7 +4,7 @@ import { getConnection } from "typeorm";
 export async function createLodge() {
   const lodgeOption = Lodge.create({
     type: "Com Hotel",
-    price: 250
+    price: 250,
   });
   await lodgeOption.save();
   return lodgeOption;
@@ -12,5 +12,7 @@ export async function createLodge() {
 
 export async function truncateLodgeTable() {
   const connection = getConnection();
-  await connection.query("TRUNCATE lodges RESTART IDENTITY");
+  await connection.query(
+    "TRUNCATE bookings, lodges RESTART IDENTITY"
+  );
 }
