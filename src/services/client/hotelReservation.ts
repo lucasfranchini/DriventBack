@@ -6,7 +6,8 @@ export async function getReservation(userId: number) {
 
   const reservation = {
     hotel: resultWithRoomAndHotel.hotel,
-    room: resultWithRoomAndHotel.room
+    room: resultWithRoomAndHotel.room,
+    otherPeopleInRoom: resultWithRoomAndHotel.room.ocuppiedVacancies - 1
   };
   return reservation;
 }
