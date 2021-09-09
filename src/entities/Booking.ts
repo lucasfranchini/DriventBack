@@ -31,6 +31,9 @@ export default class Booking extends BaseEntity {
   @Column({ nullable: true })
   lodgeId: number;
 
+  @Column({ default: false })
+  isPaid: boolean;
+
   @OneToOne(() => User, (user: User) => user.booking)
   user: User;
 
@@ -66,7 +69,6 @@ export default class Booking extends BaseEntity {
 
   static async getBooking(userId: number) {
     const booking = await this.findOne({ where: { userId } });
-    if (!booking) throw new Unauthorized();
     return booking;
   }
 }
