@@ -10,20 +10,20 @@ export async function createHotel() {
   for(let i=0; i<15; i++) {
     const number = `1${i<10 ? "0"+i:i}`;
     const roomVacancies = (i%3)+1;
-    const ocuppiedVancies =  i%2;
-    const room = await createRoom(hotel.id, number, roomVacancies, ocuppiedVancies);
+    const ocuppiedVacancies =  i%2;
+    const room = await createRoom(hotel.id, number, roomVacancies, ocuppiedVacancies);
     hotel.rooms.push(room);
   }
   await hotel.save();
   return hotel;
 }
 
-export async function createRoom(hotelId: number, number: string, roomVacancies: number, ocuppiedVancies: number ) {
+export async function createRoom(hotelId: number, number: string, roomVacancies: number, ocuppiedVacancies: number ) {
   const room = Room.create();
   room.hotelId =hotelId;
   room.number = number;
   room.roomVacancies = roomVacancies;
-  room.ocuppiedVancies = ocuppiedVancies;
+  room.ocuppiedVacancies = ocuppiedVacancies;
   await room.save();
   return room;
 }
