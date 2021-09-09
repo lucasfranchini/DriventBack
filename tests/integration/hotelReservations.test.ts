@@ -5,17 +5,31 @@ import app, { init } from "../../src/app";
 import { clearDatabase, endConnection } from "../utils/database";
 import { createBasicSettings } from "../utils/app";
 import { CreateSession } from "../factories/userFactory";
-import { createHotel } from "../factories/hotelFactory";
+import { createHotel, createRoom } from "../factories/hotelFactory";
+import { ReserveHotelRoom } from "../../src/services/client/hotelReservation";
 import Room from "../../src/entities/Room";
 import { createBooking, createDataAndReturnToken } from "../factories/bookingFactory";
 import  Session  from "../../src/entities/Session";
-import  User  from "../../src/entities/User";
+import Hotel from "../../src/entities/Hotel";
+import User from "../../src/entities/User";
 
 const agent =  supertest(app);
 let userData: {
   session: Session;
   user: User;
-}; 
+};
+
+jest.mock("../../src/controllers/client/hotel");
+const mockReserveHotelRoom = ReserveHotelRoom as jest.MockedFunction<typeof ReserveHotelRoom>;
+let hotel: Hotel;
+let room: Room; 
+
+let data: {
+  token: string;
+  modalityIds: number[];
+  lodgeIds: number[];
+};
+
 beforeAll(async () => {
   await init();
 });
@@ -24,6 +38,7 @@ beforeEach(async () => {
   await clearDatabase();
   await createBasicSettings();
   userData = await CreateSession();
+  data = await createDataAndReturnToken();
 });
 
 afterAll(async () => {
@@ -31,15 +46,37 @@ afterAll(async () => {
   await endConnection();
 });
 
-describe("POST /hotelReservations/hotels/:hotelId/rooms/:roomId", () => {
-  let data: {
-    token: string;
-    modalityIds: number[];
-    lodgeIds: number[];
-  };
+describe("GET /reservation/:id", () => {
   beforeEach(async () => {
-    data = await createDataAndReturnToken();
+    await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
+    hotel = await createHotel();
+    room = await createRoom(hotel.id, "101", 3, 1);
+    mockReserveHotelRoom(hotel.id, room.id, userData.user.id);
   });
+
+  it("should return status 200 and reservation object", async () => {
+    const response = await agent.get(`/hotelReservations/${userData.user.id}`).set("authorization", `Bearer ${userData.session.token}`);
+    expect(response.statusCode).toEqual(httpStatus.OK);
+    expect(response.body).toEqual(expect.objectContaining({
+      hotel: expect.objectContaining({
+        id: expect.any(Number),
+        image: expect.any(String),
+        name: expect.any(String)
+      }),
+      room: expect.objectContaining({
+        id: expect.any(Number),
+        hotelId: expect.any(Number),
+        number: expect.any(String),
+        ocuppiedVacancies: expect.any(Number),
+        roomVacancies: expect.any(Number)
+      }),
+      otherPeopleInRoom: expect.any(Number),
+      roomType: expect.any(String)
+    }));
+  });
+});
+
+describe("POST /hotelReservations/hotels/:hotelId/rooms/:roomId", () => {
   it("should return status 201 for valid params", async () => {
     await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
     const hotel = await createHotel();
