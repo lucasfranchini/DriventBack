@@ -12,7 +12,6 @@ import Lodge from "./Lodge";
 import BookingData from "@/interfaces/booking";
 import ConflictError from "@/errors/ConflictError";
 import UnprocessableEntity from "@/errors/UnprocessableEntity";
-import Unauthorized from "@/errors/Unauthorized";
 
 @Entity("bookings")
 export default class Booking extends BaseEntity {
