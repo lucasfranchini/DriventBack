@@ -15,4 +15,3 @@ export class createHotelReservationEntity1631065175489 implements MigrationInter
       await queryRunner.query("DROP TABLE \"hotelReservations\"");
     }
 }
-

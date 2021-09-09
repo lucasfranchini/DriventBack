@@ -1,7 +1,7 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
 import bcrypt from "bcrypt";
 import EmailNotAvailableError from "@/errors/EmailNotAvailable";
-import HotelReservation from "./HotelReservation";
+import HotelReservation from "@/entities/HotelReservation";
 import Booking from "./Booking";
 
 @Entity("users")
