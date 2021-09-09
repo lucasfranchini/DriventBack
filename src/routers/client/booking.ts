@@ -14,6 +14,11 @@ router.post(
   controller.saveBookingInfo
 );
 
+router.put(
+  "/",
+  controller.payBooking
+);
+
 router.get("/", controller.getBookingInfo);
 
 export default router;

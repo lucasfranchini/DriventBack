@@ -12,7 +12,6 @@ import Lodge from "./Lodge";
 import BookingData from "@/interfaces/booking";
 import ConflictError from "@/errors/ConflictError";
 import UnprocessableEntity from "@/errors/UnprocessableEntity";
-import Unauthorized from "@/errors/Unauthorized";
 
 @Entity("bookings")
 export default class Booking extends BaseEntity {
@@ -69,6 +68,20 @@ export default class Booking extends BaseEntity {
 
   static async getBooking(userId: number) {
     const booking = await this.findOne({ where: { userId } });
-    return booking;
+    booking.lodge;
+    return { 
+      id: booking.id, 
+      value: booking.value, 
+      isPaid: booking.isPaid,
+      modality: booking.modality,
+      lodge: booking.lodge 
+    };
+  }
+
+  static async payBooking(userId: number) {
+    const booking = await this.findOne({ where: { userId } });
+    if (booking.isPaid) throw new ConflictError("O usuário já realizou uma compra");
+    booking.isPaid = true;
+    await booking.save();
   }
 }
