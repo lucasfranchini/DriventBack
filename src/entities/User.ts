@@ -4,10 +4,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToOne,
+  OneToMany,
 } from "typeorm";
 import bcrypt from "bcrypt";
 import EmailNotAvailableError from "@/errors/EmailNotAvailable";
 import Booking from "./Booking";
+import Activity_User from "./Activity_User";
 
 @Entity("users")
 export default class User extends BaseEntity {
@@ -25,6 +27,11 @@ export default class User extends BaseEntity {
 
   @OneToOne(() => Booking, (booking: Booking) => booking.user)
   booking: Booking;
+
+  @OneToMany(() => Activity_User, (activity: Activity_User) => activity.user, {
+    eager: true,
+  })
+  activity: Activity_User;
 
   static async createNew(email: string, password: string) {
     await this.validateDuplicateEmail(email);
