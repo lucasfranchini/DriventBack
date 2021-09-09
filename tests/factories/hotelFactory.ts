@@ -23,7 +23,7 @@ export async function createRoom(hotelId: number, number: string, roomVacancies:
   room.hotelId =hotelId;
   room.number = number;
   room.roomVacancies = roomVacancies;
-  room.ocuppiedVancies = ocuppiedVancies;
+  room.ocuppiedVacancies = ocuppiedVancies;
   await room.save();
   return room;
 }

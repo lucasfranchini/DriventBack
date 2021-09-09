@@ -8,14 +8,10 @@ import ConflictError from "@/errors/ConflictError";
 import UnauthorizedError from "@/errors/Unauthorized";
 import NotFoundError from "@/errors/NotFoundError";
 import UnprocessableEntity from "@/errors/UnprocessableEntity";
+import InvalidBookingError from "@/errors/InvalidBooking";
 
 /* eslint-disable-next-line */
-export default function errorHandlingMiddleware(
-  err: Error,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) {
+export default function errorHandlingMiddleware(err: Error,_req: Request,res: Response,_next: NextFunction) {
   if (err instanceof InvalidEmailError) {
     return res.status(httpStatus.BAD_REQUEST).send({
       message: err.message,
@@ -55,6 +51,12 @@ export default function errorHandlingMiddleware(
 
   if (err instanceof UnprocessableEntity) {
     return res.status(httpStatus.UNPROCESSABLE_ENTITY).send({
+      message: err.message,
+    });
+  }
+
+  if (err instanceof InvalidBookingError) {
+    return res.status(httpStatus.UNAUTHORIZED).send({
       message: err.message,
     });
   }

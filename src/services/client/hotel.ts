@@ -1,4 +1,5 @@
 import Hotel from "@/entities/Hotel";
+import NotFoundError from "@/errors/NotFoundError";
 import HotelInfo from "@/interfaces/hotelInfo";
 
 export async function get() {
@@ -9,3 +10,12 @@ export async function get() {
   });
   return hotels;
 }
+
+export async function getOne(id: number) {
+  const hotel  = await Hotel.getRoomsOrdered(id);
+  if(hotel===undefined) {
+    throw new NotFoundError();
+  }
+  return hotel;
+}
+

@@ -28,7 +28,7 @@ afterAll(async () => {
 
 describe("GET /bookings", () => {
   it("should return the user's booking and 200 for valid params", async () => {
-    const token = await createDataAndReturnToken();
+    const token = (await createDataAndReturnToken()).token;
     const data = { id: 1, userId: 1, modalityId: 1, lodgeId: 1, value: 500 };
     await createBooking(data);
     const usersBooking = await Booking.findOne({
@@ -54,7 +54,7 @@ describe("GET /bookings", () => {
 
 describe("POST /bookings", () => {
   it("should create booking and return 201 for valid params", async () => {
-    const token = await createDataAndReturnToken();
+    const token = (await createDataAndReturnToken()).token;
     const body = { modalityId: 1, lodgeId: 1, value: 600 };
     const response = await agent
       .post("/bookings")
@@ -76,7 +76,7 @@ describe("POST /bookings", () => {
   });
 
   it("should return 422 for invalid lodge", async () => {
-    const token = await createDataAndReturnToken();
+    const token = (await createDataAndReturnToken()).token;
     const body = { modalityId: 1, lodgeId: 8001, value: 600 };
     const response = await agent
       .post("/bookings")
@@ -86,7 +86,7 @@ describe("POST /bookings", () => {
   });
 
   it("should return 422 for invalid modality", async () => {
-    const token = await createDataAndReturnToken();
+    const token = (await createDataAndReturnToken()).token;
     const body = { modalityId: 8001, lodgeId: 1, value: 600 };
     const response = await agent
       .post("/bookings")
@@ -96,7 +96,7 @@ describe("POST /bookings", () => {
   });
 
   it("should return 409 for alreay registered user", async () => {
-    const token = await createDataAndReturnToken();
+    const token = (await createDataAndReturnToken()).token;
     const body = { modalityId: 1, lodgeId: 1, value: 600 };
     await agent
       .post("/bookings")

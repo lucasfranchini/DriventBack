@@ -1,12 +1,7 @@
-import {
-  BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-} from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
 import bcrypt from "bcrypt";
 import EmailNotAvailableError from "@/errors/EmailNotAvailable";
+import HotelReservation from "@/entities/HotelReservation";
 import Booking from "./Booking";
 
 @Entity("users")
@@ -22,6 +17,9 @@ export default class User extends BaseEntity {
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
+
+  @OneToOne(() => HotelReservation, hotelReservation => hotelReservation.user)
+  hotelReservation: HotelReservation;
 
   @OneToOne(() => Booking, (booking: Booking) => booking.user)
   booking: Booking;
