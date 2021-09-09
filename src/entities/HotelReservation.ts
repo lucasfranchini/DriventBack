@@ -25,4 +25,12 @@ export default class HotelReservation extends BaseEntity {
 
   @ManyToOne(() => Room, room => room.hotelReservations)
   room: Room;
+
+  static async getReservationByUserId(hotelId: number, userId: number, roomId: number) {
+    return await this.createQueryBuilder("hotelReservation")
+      .leftJoinAndSelect("hotelReservation.hotel", "hotel", "hotel.id = :hotelId", { hotelId })
+      .leftJoinAndSelect("hotelReservation.room", "room", "room.id = :roomId", { roomId })
+      .where("hotelReservation.userId = :userId", { userId })
+      .getOne();
+  }
 }

@@ -36,6 +36,7 @@ export default class Hotel extends BaseEntity {
       .leftJoinAndSelect("hotelReservations.room", "reservationRoom")
       .where("hotel.id = :hotelId", { hotelId })
       .getOne();
+
     if(!hotel || hotel.rooms.length === 0) throw new NotFoundError();
     return hotel;
   }

@@ -18,4 +18,3 @@ export async function getOne(id: number) {
   }
   return hotel;
 }
-

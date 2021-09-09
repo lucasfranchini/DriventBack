@@ -3,6 +3,11 @@ import InvalidDataError from "@/errors/InvalidData";
 import httpStatus from "http-status";
 import * as service from "@/services/client/hotelReservation";
 
+export async function getReservation(req: Request, res: Response) {
+  const userId  = Number(req.params.id);
+  const reservation = await service.getReservation(userId);
+  res.send(reservation);
+
 export async function ReserveHotelRoom(req: Request, res: Response) {
   const  hotelId = Number(req.params.hotelId);
   const  roomId = Number(req.params.roomId);
