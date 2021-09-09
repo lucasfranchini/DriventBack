@@ -1,0 +1,10 @@
+seeds:
+  - Location:
+      id: 1
+      name: "Salão Boladão"
+  - Location:
+      id: 2
+      name: "Salão Nobre"
+  - Location:
+      id: 3
+      name: "Salão Bootbar"

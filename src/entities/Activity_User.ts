@@ -7,13 +7,9 @@ export default class Activity_User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Activity, (activity: Activity) => activity.activity, {
-    eager: true,
-  })
+  @ManyToOne(() => Activity, (activity: Activity) => activity.activity)
   activity: Activity;
 
-  @ManyToOne(() => User, (user: User) => user.activity, {
-    eager: true,
-  })
+  @ManyToOne(() => User, (user: User) => user.activity)
   user: User;
 }

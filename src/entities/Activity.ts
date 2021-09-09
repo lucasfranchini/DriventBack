@@ -29,17 +29,22 @@ export default class Activity extends BaseEntity {
   @Column()
   remaining_seats: string;
 
-  @ManyToOne(() => Location, (location: Location) => location.activity, {
+  @ManyToOne(() => Location, {
     eager: true,
   })
   location: Location;
 
   @OneToMany(
     () => Activity_User,
-    (activity_user: Activity_User) => activity_user.activity,
-    {
-      eager: true,
-    }
+    (activity_user: Activity_User) => activity_user.activity
   )
   activity: Activity_User;
+
+  //   static async getDates() {}
+
+  //   static async getActivity() {}
+
+  //   static async updateActivity() {}
+
+  //   static updateSeats() {}
 }

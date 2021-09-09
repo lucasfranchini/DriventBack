@@ -1,10 +1,4 @@
-import {
-  BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-} from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import Activity from "./Activity";
 
 @Entity("location")
@@ -13,10 +7,5 @@ export default class Location extends BaseEntity {
   id: number;
 
   @Column()
-  name: Date;
-
-  @OneToMany(() => Activity, (activity: Activity) => activity.location, {
-    eager: true,
-  })
-  activity: Activity[];
+  name: string;
 }
