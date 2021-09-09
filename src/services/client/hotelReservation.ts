@@ -1,7 +1,12 @@
 import HotelReservation from "@/entities/HotelReservation";
 
-export async function getReservation(userId: string) {
-  const reservation =  await HotelReservation.findOne({ where: { userId } });
+export async function getReservation(userId: number) {
+  const result =  await HotelReservation.findOne({ where: { userId } });
+  const resultWithRoomAndHotel = await HotelReservation.getReservationByUserId(result.hotelId, result.userId, result.roomId);
 
+  const reservation = {
+    hotel: resultWithRoomAndHotel.hotel,
+    room: resultWithRoomAndHotel.room
+  };
   return reservation;
 }

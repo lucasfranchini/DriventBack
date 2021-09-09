@@ -6,4 +6,6 @@ const router = Router();
 
 router.get("/", controller.get);
 
+router.get("/:id", controller.getOne);
+router.post("/:hotelId/rooms/:roomId", controller.ReserveHotelRoom);
 export default router;

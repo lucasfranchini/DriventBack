@@ -4,6 +4,6 @@ import * as controller from "@/controllers/client/hotelReservation";
 
 const router = Router();
 
-router.get("/:userId", controller.getReservation);
+router.get("/:id", controller.getReservation);
 
 export default router;

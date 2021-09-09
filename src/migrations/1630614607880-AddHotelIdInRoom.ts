@@ -15,3 +15,4 @@ export class AddHotelIdInRoom1630614607880 implements MigrationInterface {
       await queryRunner.query("ALTER TABLE \"rooms\" ADD CONSTRAINT \"FK_e9d4d68c8c47b7fe47b8e233f60\" FOREIGN KEY (\"hotelId\") REFERENCES \"hotels\"(\"id\") ON DELETE NO ACTION ON UPDATE NO ACTION");
     }
 }
+

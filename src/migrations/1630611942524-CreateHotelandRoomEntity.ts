@@ -21,3 +21,4 @@ export class CreateHotelandRoomEntity1630611942524 implements MigrationInterface
       await queryRunner.query("DROP TABLE \"rooms\"");
     }
 }
+

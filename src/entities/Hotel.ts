@@ -1,6 +1,6 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import HotelReservation from "./HotelReservation";
-import Room from "./Room";
+import HotelReservation from "@/entities/HotelReservation";
+import Room from "@/entities/Room";
 
 @Entity("hotels")
 export default class Hotel extends BaseEntity {
@@ -16,8 +16,25 @@ export default class Hotel extends BaseEntity {
   @OneToMany(() => Room, room => room.hotel, { eager: true })
   rooms: Room[];
 
-  @OneToMany(() => HotelReservation, hotelReservation => hotelReservation.hotel)
+  @OneToMany(() => HotelReservation, hotelReservations => hotelReservations.hotel)
   hotelReservations: HotelReservation[];
+
+  static async getRoomsOrdered(id: number) {
+    return await this.createQueryBuilder("hotel")
+      .leftJoinAndSelect("hotel.rooms", "rooms")
+      .where("hotel.id = :id", { id })
+      .orderBy("rooms.id", "ASC")
+      .getOne();
+  }
+
+  static async getWithSpecifiedRoomAndSpecifiedReservation(hotelId: number, roomId: number, userId: number) {
+    return await this.createQueryBuilder("hotel")
+      .leftJoinAndSelect("hotel.rooms", "rooms", "rooms.id = :roomId", { roomId })
+      .leftJoinAndSelect("hotel.hotelReservations", "hotelReservations", "hotelReservations.userId = :userId", { userId })
+      .leftJoinAndSelect("hotelReservations.room", "reservationRoom")
+      .where("hotel.id = :hotelId", { hotelId })
+      .getOne();
+  }
 
   totalVacancies() {
     return this.rooms.reduce((acc, room) => {

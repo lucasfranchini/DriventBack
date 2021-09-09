@@ -14,7 +14,7 @@ export default class Room extends BaseEntity {
   roomVacancies: number;
 
   @Column()
-  ocuppiedVancies: number;
+  ocuppiedVacancies: number;
 
   @Column()
   hotelId: number;
@@ -25,8 +25,18 @@ export default class Room extends BaseEntity {
   @OneToMany(() => HotelReservation, hotelReservation => hotelReservation.room)
   hotelReservations: HotelReservation[];
 
+  async incrementOcuppiedVacancies() {
+    this.ocuppiedVacancies++;
+    await this.save();
+  }
+
+  async decrementOcuppiedVacancies() {
+    this.ocuppiedVacancies--;
+    await this.save();
+  }
+
   freeVacancies() {
-    return this.roomVacancies - this.ocuppiedVancies;
+    return this.roomVacancies - this.ocuppiedVacancies;
   }
 
   type() {
