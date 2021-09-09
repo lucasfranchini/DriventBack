@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import bcrypt from "bcrypt";
 import EmailNotAvailableError from "@/errors/EmailNotAvailable";
+import HotelReservation from "@/entities/HotelReservation";
 import Booking from "./Booking";
 import Activity_User from "./Activity_User";
 
@@ -24,6 +25,9 @@ export default class User extends BaseEntity {
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
+
+  @OneToOne(() => HotelReservation, (hotelReservation) => hotelReservation.user)
+  hotelReservation: HotelReservation;
 
   @OneToOne(() => Booking, (booking: Booking) => booking.user)
   booking: Booking;
