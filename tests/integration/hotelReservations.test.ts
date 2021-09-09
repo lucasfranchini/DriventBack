@@ -22,8 +22,6 @@ let userData: {
 jest.mock("../../src/controllers/client/hotel");
 const mockReserveHotelRoom = ReserveHotelRoom as jest.MockedFunction<typeof ReserveHotelRoom>;
 let hotel: Hotel;
-let room: Room; 
-
 let data: {
   token: string;
   modalityIds: number[];
@@ -50,8 +48,7 @@ describe("GET /reservation/:id", () => {
   beforeEach(async () => {
     await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
     hotel = await createHotel();
-    room = await createRoom(hotel.id, "101", 3, 1);
-    mockReserveHotelRoom(hotel.id, room.id, userData.user.id);
+    mockReserveHotelRoom(hotel.id, hotel.rooms[0].id, userData.user.id);
   });
 
   it("should return status 200 and reservation object", async () => {
@@ -77,15 +74,23 @@ describe("GET /reservation/:id", () => {
 });
 
 describe("POST /hotelReservations/hotels/:hotelId/rooms/:roomId", () => {
+  beforeEach(async () => {
+    hotel = await createHotel();
+  });
+
   it("should return status 201 for valid params", async () => {
     await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
-    const hotel = await createHotel();
     const response = await agent.post(`/hotelReservations/hotels/${hotel.id}/rooms/${hotel.rooms[0].id}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
+    expect(response.statusCode).toBe(httpStatus.CREATED);
+  });
+  it("should update room reservation if user already has reservation", async () => {
+    await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
+    mockReserveHotelRoom(hotel.id, hotel.rooms[0].id, userData.user.id);
+    const response = await agent.post(`/hotelReservations/hotels/${hotel.id}/rooms/${hotel.rooms[1].id}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
     expect(response.statusCode).toBe(httpStatus.CREATED);
   });
   it("should incremente ocuppiedVacencies in selected room for valid params", async () => {
     await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
-    const hotel = await createHotel();
     const oldVacancies = hotel.rooms[0].ocuppiedVacancies;
     await agent.post(`/hotelReservations/hotels/${hotel.id}/rooms/${hotel.rooms[0].id}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
     const room = await Room.findOne(hotel.rooms[0].id);
@@ -93,25 +98,21 @@ describe("POST /hotelReservations/hotels/:hotelId/rooms/:roomId", () => {
   });
   it("should return status 401 for 'Sem Hotel' lodge", async () => {
     await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[1], userId: userData.user.id, value: 500 });
-    const hotel = await createHotel();
     const response = await agent.post(`/hotelReservations/hotels/${hotel.id}/rooms/${hotel.rooms[0].id}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
     expect(response.statusCode).toBe(httpStatus.UNAUTHORIZED);
   });
   it("should return status 409 for full room", async () => {
     await createBooking({ modalityId: data.modalityIds[0], lodgeId: data.lodgeIds[0], userId: userData.user.id, value: 500 });
-    const hotel = await createHotel();
     const room = hotel.rooms.find(r => r.ocuppiedVacancies === r.roomVacancies);
     const response = await agent.post(`/hotelReservations/hotels/${hotel.id}/rooms/${room.id}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
     expect(response.statusCode).toBe(httpStatus.CONFLICT);
   });
   it("should return status 404 for invalid hotelId", async () => {
-    const hotel = await createHotel();
     const response = await agent.post(`/hotelReservations/hotels/${hotel.id+1}/rooms/${hotel.rooms[0].id}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
     expect(response.statusCode).toBe(httpStatus.NOT_FOUND);
   });
 
   it("should return status 404 for invalid roomId", async () => {
-    const hotel = await createHotel();
     const room = hotel.rooms[hotel.rooms.length-1];
     const response = await agent.post(`/hotelReservations/hotels/${hotel.id}/rooms/${room.id+1}`).send({}).set("authorization", `Bearer ${userData.session.token}`);
     expect(response.statusCode).toBe(httpStatus.NOT_FOUND);
