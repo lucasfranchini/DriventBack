@@ -68,14 +68,18 @@ export default class Booking extends BaseEntity {
 
   static async getBooking(userId: number) {
     const booking = await this.findOne({ where: { userId } });
-    booking.lodge;
-    return { 
-      id: booking.id, 
-      value: booking.value, 
-      isPaid: booking.isPaid,
-      modality: booking.modality,
-      lodge: booking.lodge 
-    };
+
+    if (booking) {
+      return { 
+        id: booking.id, 
+        value: booking.value, 
+        isPaid: booking.isPaid,
+        modality: booking.modality,
+        lodge: booking.lodge 
+      };
+    }
+
+    return "";
   }
 
   static async payBooking(userId: number) {
