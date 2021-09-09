@@ -40,9 +40,15 @@ export default class Activity extends BaseEntity {
   )
   activity: Activity_User;
 
-  //   static async getDates() {}
+  static async getDates() {
+    const activitiesDates = await this.createQueryBuilder("activity")
+      .select("date")
+      .distinct(true)
+      .orderBy("date", "ASC");
+    return activitiesDates;
+  }
 
-  //   static async getActivity() {}
+  //   static async getActivityByDate(date: Date) {}
 
   //   static async updateActivity() {}
 
