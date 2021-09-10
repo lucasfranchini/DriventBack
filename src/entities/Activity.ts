@@ -9,7 +9,7 @@ import {
 import Location from "./Location";
 import Activity_User from "./Activity_User";
 
-@Entity("activity")
+@Entity("activities")
 export default class Activity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,7 +27,7 @@ export default class Activity extends BaseEntity {
   end_hour: string;
 
   @Column()
-  remaining_seats: string;
+  remaining_seats: number;
 
   @ManyToOne(() => Location, {
     eager: true,
@@ -36,15 +36,16 @@ export default class Activity extends BaseEntity {
 
   @OneToMany(
     () => Activity_User,
-    (activity_user: Activity_User) => activity_user.activity
+    (activity_user: Activity_User) => activity_user.activities
   )
-  activity: Activity_User;
+  activities: Activity_User;
 
   static async getDates() {
-    const activitiesDates = await this.createQueryBuilder("activity")
+    const activitiesDates = await this.createQueryBuilder("activities")
       .select("date")
       .distinct(true)
-      .orderBy("date", "ASC");
+      .orderBy("date", "ASC")
+      .getRawMany();
     return activitiesDates;
   }
 

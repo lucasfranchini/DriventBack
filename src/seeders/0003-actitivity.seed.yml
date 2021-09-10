@@ -1,7 +1,7 @@
 seeds:
   - Activity:
       id: 1
-      date: "2021-09-28 20:30:00"
+      date: "2021-09-28 00:00:00"
       title: "Bootbar"
       start_hour: "9:00"
       end_hour: "12:00"
@@ -9,8 +9,24 @@ seeds:
       locationId: 3
   - Activity:
       id: 2
-      date: "2021-09-27 20:30:00"
+      date: "2021-09-27 00:00:00"
       title: "Bootbar 2"
+      start_hour: "10:00"
+      end_hour: "11:00"
+      remaining_seats: 13
+      locationId: 1
+  - Activity:
+      id: 3
+      date: "2021-09-29 00:00:00"
+      title: "Bootbar 3"
+      start_hour: "10:00"
+      end_hour: "11:00"
+      remaining_seats: 13
+      locationId: 1
+  - Activity:
+      id: 4
+      date: "2021-09-28 00:00:00"
+      title: "Bootbar 4"
       start_hour: "10:00"
       end_hour: "11:00"
       remaining_seats: 13

@@ -1,7 +1,7 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import Activity from "./Activity";
 
-@Entity("location")
+@Entity("locations")
 export default class Location extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
