@@ -38,7 +38,7 @@ describe("GET /bookings", () => {
     const response = await agent
       .get("/bookings")
       .set("authorization", `Bearer ${token}`);
-    expect(response.body).toEqual(usersBooking);
+    expect(response.body).toEqual({ id: usersBooking.id, value: usersBooking.value, modality: usersBooking.modality, lodge: usersBooking.lodge, isPaid: usersBooking.isPaid } );
     expect(response.status).toEqual(200);
   });
 
@@ -105,6 +105,30 @@ describe("POST /bookings", () => {
     const response = await agent
       .post("/bookings")
       .send(body)
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(409);
+  });
+});
+
+describe("PUT /bookings", () => {
+  it("should return 201 for valid auth", async () => {
+    const token = await createDataAndReturnToken();
+    const data = { id: 1, userId: 1, modalityId: 1, lodgeId: 1, value: 500 };
+    await createBooking(data);
+    const response = await agent
+      .put("/bookings")
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(201);
+  });
+
+  it("should return 409 users that already paid", async () => {
+    const token = await createDataAndReturnToken();
+    const data = { id: 1, userId: 1, modalityId: 1, lodgeId: 1, value: 500 };
+    const bookingBeingPaid = await createBooking(data);
+    bookingBeingPaid.isPaid = true;
+    bookingBeingPaid.save();
+    const response = await agent
+      .put("/bookings")
       .set("authorization", `Bearer ${token}`);
     expect(response.status).toEqual(409);
   });

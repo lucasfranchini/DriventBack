@@ -9,3 +9,8 @@ export async function getUserBooking(userId: number) {
   const result = await Booking.getBooking(userId);
   return result;
 }
+
+export async function payBooking(userId: number) {
+  await Booking.payBooking(userId);
+}
+

@@ -15,3 +15,9 @@ export async function getBookingInfo(req: Request, res: Response) {
   const result = await bookingService.getUserBooking(userId);
   res.send(result).status(200);
 }
+
+export async function payBooking(req: Request, res: Response) {
+  const userId = req.user.id;
+  await bookingService.payBooking(userId);
+  res.sendStatus(201);
+}
