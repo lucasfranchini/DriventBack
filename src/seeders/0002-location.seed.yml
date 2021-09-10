@@ -1,0 +1,10 @@
+seeds:
+  - Location:
+      id: 1
+      name: "Salão Principal"
+  - Location:
+      id: 2
+      name: "Salão Nobre"
+  - Location:
+      id: 3
+      name: "Salão Bootbar"
