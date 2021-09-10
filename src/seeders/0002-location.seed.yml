@@ -1,7 +1,7 @@
 seeds:
   - Location:
       id: 1
-      name: "Salão Boladão"
+      name: "Salão Principal"
   - Location:
       id: 2
       name: "Salão Nobre"

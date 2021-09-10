@@ -50,4 +50,6 @@ export async function createActivity() {
   for (let i = 0; i < activities.length; i++) {
     Activity.create(activities[i]);
   }
+
+  return activities;
 }

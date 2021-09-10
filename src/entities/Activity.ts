@@ -49,9 +49,10 @@ export default class Activity extends BaseEntity {
     return activitiesDates;
   }
 
-  //   static async getActivityByDate(date: Date) {}
-
-  //   static async updateActivity() {}
-
-  //   static updateSeats() {}
+  static async getActivityByDate(date: Date) {
+    const activities = await this.find({
+      where: { date },
+    });
+    return activities;
+  }
 }

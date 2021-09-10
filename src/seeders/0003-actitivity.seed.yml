@@ -14,7 +14,7 @@ seeds:
       start_hour: "10:00"
       end_hour: "11:00"
       remaining_seats: 13
-      locationId: 1
+      locationId: 2
   - Activity:
       id: 3
       date: "2021-09-29 00:00:00"
