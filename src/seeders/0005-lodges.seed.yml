@@ -1,0 +1,9 @@
+seeds:
+    - Lodge:
+        id: 1
+        type: "Sem Hotel"
+        price: 0
+    - Lodge:
+        id: 2
+        type: "Com Hotel"
+        price: 350
