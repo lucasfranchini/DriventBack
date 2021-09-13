@@ -1,7 +1,9 @@
-import Session from "@/entities/Session";
+import { promisify } from "util";
+import { client } from "@/app";
 
 export async function findSessionByToken(token: string) {
-  const session = await Session.findOne({ where: { token } });
+  const getAsync = promisify(client.get).bind(client);
+  const userSession = await getAsync(token);
 
-  return session;
+  return userSession;
 }
