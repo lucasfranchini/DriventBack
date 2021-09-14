@@ -1,6 +1,6 @@
 import { signIn } from "../../src/services/client/auth";
 import User from "../../src/entities/User";
-import { client } from "../../src/app";
+import  client  from "../../src/redis";
 import { promisify } from "util";
 import jwt from "jsonwebtoken";
 

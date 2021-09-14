@@ -1,5 +1,5 @@
 import { promisify } from "util";
-import { client } from "@/app";
+import  client  from "@/redis";
 
 export async function findUserSessionByToken(token: string) {
   const getAsync = promisify(client.get).bind(client);

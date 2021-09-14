@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 import UnauthorizedError from "@/errors/Unauthorized";
 import User from "@/entities/User";
-import { client } from "@/app";
+import  client  from "@/redis";
 
 export async function signIn(email: string, password: string) {
   const user = await User.findByEmailAndPassword(email, password);

@@ -1,6 +1,6 @@
 import { getConnection } from "typeorm";
 import { promisify } from "util";
-import { client } from "../../src/app";
+import  client  from "../../src/redis";
 
 function getEntities() {
   const entities = [];

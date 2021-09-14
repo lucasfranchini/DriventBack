@@ -1,7 +1,7 @@
 import faker from "faker";
 import jwt from "jsonwebtoken";
 import { promisify } from "util";
-import { client } from "../../src/app";
+import  client  from "../../src/redis";
 import User from "../../src/entities/User";
 
 export async function createUser() {
