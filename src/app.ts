@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const client = redis.createClient();
+const client = redis.createClient({ url: process.env.REDIS_URL });
 
 app.get("/health", (_req, res) => {
   res.send("OK!");
