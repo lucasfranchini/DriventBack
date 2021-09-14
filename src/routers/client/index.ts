@@ -10,6 +10,7 @@ import hotelRouter from "@/routers/client/hotel";
 import hotelReservationRouter from "@/routers/client/hotelReservation";
 import bookingRouter from "@/routers/client/booking";
 import activityRouter from "@/routers/client/activity";
+import resetPasswordRouter from "@/routers/client/resetPassword";
 
 import tokenValidationMiddleware from "@/middlewares/tokenValidationMiddleware";
 
@@ -18,6 +19,7 @@ const router = Router();
 router.use("/event", eventRouter);
 router.use("/users", userRouter);
 router.use("/auth", authRouter);
+router.use("/resetPassword", resetPasswordRouter);
 router.use("/modalities", modalityRouter);
 router.use("/lodges", lodgeRouter);
 router.use("/enrollments", tokenValidationMiddleware, enrollmentRouter);
