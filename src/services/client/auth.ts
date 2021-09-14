@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 import UnauthorizedError from "@/errors/Unauthorized";
 import User from "@/entities/User";
-import Session from "@/entities/Session";
+import  client  from "@/redis";
 
 export async function signIn(email: string, password: string) {
   const user = await User.findByEmailAndPassword(email, password);
@@ -15,7 +15,7 @@ export async function signIn(email: string, password: string) {
     userId: user.id
   }, process.env.JWT_SECRET);
 
-  await Session.createNew(user.id, token);
+  client.set(token, `${user.id}` );
 
   return {
     user: {
