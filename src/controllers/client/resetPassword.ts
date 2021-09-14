@@ -9,6 +9,7 @@ export async function sendToken(req: Request, res: Response) {
 
 export async function verifyTokenValidation(req: Request, res: Response) {
   const { token } = req.params;
+  await resetPasswordService.verifyTokenValidation(token);
   res.sendStatus(200);
 }
 

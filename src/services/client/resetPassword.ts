@@ -19,6 +19,7 @@ export async function sendToken(email: string) {
 
 export async function verifyTokenValidation(token: string) {
   const { email } = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+  console.log(token);
   await User.verifyEmail(email);
   return false;
 }
