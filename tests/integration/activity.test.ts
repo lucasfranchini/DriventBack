@@ -7,7 +7,6 @@ import { createBasicSettings } from "../utils/app";
 import { CreateSession } from "../factories/userFactory";
 import { createActivity } from "../factories/activityFactory";
 import Activity from "../../src/entities/Activity";
-import { Any } from "typeorm";
 
 const agent = supertest(app);
 
