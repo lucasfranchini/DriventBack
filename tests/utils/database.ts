@@ -1,4 +1,6 @@
 import { getConnection } from "typeorm";
+import { promisify } from "util";
+import  client  from "../../src/redis";
 
 function getEntities() {
   const entities = [];
@@ -28,4 +30,6 @@ export async function clearDatabase() {
 
 export async function endConnection() {
   await getConnection().close();
+  const quitAsync = promisify(client.quit).bind(client);
+  await quitAsync();
 }
