@@ -1,0 +1,9 @@
+seeds:
+    - Modality:
+        id: 1
+        type: "Presencial"
+        price: 250
+    - Modality:
+        id: 2
+        type: "Online"
+        price: 100
