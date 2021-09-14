@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import Location from "./Location";
 import Activity_User from "./Activity_User";
+import UnprocessableEntity from "@/errors/UnprocessableEntity";
 
 @Entity("activities")
 export default class Activity extends BaseEntity {
@@ -54,5 +55,18 @@ export default class Activity extends BaseEntity {
       where: { date },
     });
     return activities;
+  }
+
+  static async subscribe(userId: number, activityId: number) {
+    const activity = await this.findOne({
+      where: { id: activityId },
+    });
+    const userInstance = await Activity_User.findOne({ where: { userId, activitiesId: activityId } } );
+    if (!activity) throw new UnprocessableEntity("Atividade não existente.");
+    if (activity.remaining_seats === 0 ) throw new UnprocessableEntity("A atividade já está cheia.");
+    if (userInstance) throw new UnprocessableEntity("O usuário já está cadastrado nessa atividade");
+    activity.remaining_seats -= 1;
+    await activity.save();
+    await Activity_User.insert({ userId, activitiesId: activityId } );
   }
 }

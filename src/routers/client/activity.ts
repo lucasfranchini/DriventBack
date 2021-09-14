@@ -14,5 +14,9 @@ router.post(
   schemaValidatingMiddleware(activitySchema),
   controller.getActivitiesByDates
 );
+router.post(
+  "/seat/:id",
+  controller.subscribe
+);
 
 export default router;

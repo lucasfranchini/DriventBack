@@ -12,3 +12,8 @@ export async function getActivitiesByDate(date: Date, userId: number) {
   const result = { activities: allActivities, userActivities };
   return result;
 }
+
+export async function subscribe(userId: number, activityId: number) {
+  const result = await Activity.subscribe(userId, activityId);
+  return result;
+}
