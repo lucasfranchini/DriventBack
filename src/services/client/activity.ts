@@ -1,11 +1,14 @@
 import Activity from "@/entities/Activity";
+import Activity_User from "@/entities/Activity_User";
 
 export async function getAllDates() {
   const result = await Activity.getDates();
   return result;
 }
 
-export async function getActivitiesByDate(date: Date) {
-  const result = await Activity.getActivityByDate(date);
+export async function getActivitiesByDate(date: Date, userId: number) {
+  const allActivities = await Activity.getActivityByDate(date);
+  const userActivities = await Activity_User.getUsersActivities(userId);
+  const result = { activities: allActivities, userActivities };
   return result;
 }

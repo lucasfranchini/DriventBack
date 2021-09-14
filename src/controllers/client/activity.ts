@@ -8,10 +8,11 @@ export async function getAllDates(req: Request, res: Response) {
 }
 
 export async function getActivitiesByDates(req: Request, res: Response) {
+  const userId = req.user.id;
   const date = req.body.date;
 
   const newDate = new Date(date);
 
-  const result = await activityService.getActivitiesByDate(newDate);
+  const result = await activityService.getActivitiesByDate(newDate, userId);
   res.send(result).status(200);
 }
