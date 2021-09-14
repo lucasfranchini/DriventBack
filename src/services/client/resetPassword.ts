@@ -6,7 +6,7 @@ import InvalidTokenError from "@/errors/InvalidTokenError";
 export async function sendToken(email: string) {
   await User.verifyEmail(email);
   const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: 60*60 });
-  const link = `${process.env.FRONT_URL}/resetPassword/${token}`;
+  const link = `${process.env.FRONT_URL}/reset-password/${token}`;
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const mail= {
     to: email,
@@ -27,9 +27,11 @@ export async function verifyTokenValidation(token: string) {
   catch{
     throw new InvalidTokenError();
   }
-  await User.verifyEmail(email);
+  return email;
 }
 
-export async function resetPassword() {
-  return false;
+export async function resetPassword(token: string, newPassword: string) {
+  const email =await verifyTokenValidation(token);
+  const user = await User.verifyEmail(email);
+  await user.changePassword(newPassword);
 }

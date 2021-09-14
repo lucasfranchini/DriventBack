@@ -48,6 +48,11 @@ export default class User extends BaseEntity {
     return newUser;
   }
 
+  async changePassword(newPassword: string) {
+    this.password = User.hashPassword(newPassword);
+    await this.save();
+  }
+
   static hashPassword(password: string) {
     return bcrypt.hashSync(password, 12);
   }
@@ -73,5 +78,6 @@ export default class User extends BaseEntity {
   static async verifyEmail(email: string) {
     const user = await this.findOne({ email });
     if(!user) throw new InvalidEmailError(email);
+    return user;
   }
 }

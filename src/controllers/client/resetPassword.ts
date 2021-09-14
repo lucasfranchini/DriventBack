@@ -14,5 +14,8 @@ export async function verifyTokenValidation(req: Request, res: Response) {
 }
 
 export async function resetPassword(req: Request, res: Response) {
+  const { token } = req.params;
+  const newPassword = req.body.newPassword as string;
+  await resetPasswordService.resetPassword(token, newPassword);
   res.sendStatus(200);
 }
