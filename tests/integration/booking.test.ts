@@ -21,8 +21,8 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await clearDatabase();
   await truncateTables();
+  await clearDatabase();
   await endConnection();
 });
 
@@ -117,7 +117,7 @@ describe("PUT /bookings", () => {
     await createBooking(data);
     const response = await agent
       .put("/bookings")
-      .set("authorization", `Bearer ${token}`);
+      .set("authorization", `Bearer ${token.token}`);
     expect(response.status).toEqual(201);
   });
 
@@ -129,7 +129,7 @@ describe("PUT /bookings", () => {
     bookingBeingPaid.save();
     const response = await agent
       .put("/bookings")
-      .set("authorization", `Bearer ${token}`);
+      .set("authorization", `Bearer ${token.token}`);
     expect(response.status).toEqual(409);
   });
 });

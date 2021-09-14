@@ -95,7 +95,6 @@ describe.only("POST /activities", () => {
     const { session } = await CreateSession();
     const activities = await createActivity();
     const body = { date: activities[0].date };
-
     const response = await agent
       .post("/activities")
       .send(body)
@@ -105,7 +104,6 @@ describe.only("POST /activities", () => {
       .select()
       .where(new Date(activities[0].date))
       .getRawMany();
-
-    expect(response.body.length).toEqual(allActivities.length);
+    expect(response.body.activities.length).toEqual(allActivities.length);
   });
 });

@@ -20,5 +20,5 @@ export async function CreateSession() {
     userId: user.id
   }, process.env.JWT_SECRET);
   const session =  await Session.createNew(user.id, token);
-  return { session, user };
+  return { session, user, token };
 } 

@@ -48,7 +48,7 @@ export async function createActivity() {
   ];
 
   for (let i = 0; i < activities.length; i++) {
-    Activity.create(activities[i]);
+    Activity.insert(activities[i]);
   }
 
   return activities;
