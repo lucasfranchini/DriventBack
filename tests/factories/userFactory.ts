@@ -1,7 +1,8 @@
 import faker from "faker";
 import jwt from "jsonwebtoken";
+import { promisify } from "util";
+import { client } from "../../src/app";
 import User from "../../src/entities/User";
-import Session from "../../src/entities/Session";
 
 export async function createUser() {
   const user = User.create({
@@ -19,6 +20,7 @@ export async function CreateSession() {
   const token = jwt.sign({
     userId: user.id
   }, process.env.JWT_SECRET);
-  const session =  await Session.createNew(user.id, token);
-  return { session, user };
+  const setAsync = promisify(client.set).bind(client);
+  await setAsync(token, `${user.id}`);
+  return { token, user };
 } 

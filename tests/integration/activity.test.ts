@@ -33,16 +33,16 @@ describe("GET /activities", () => {
   });
 
   it("should return status 200", async () => {
-    const { session } = await CreateSession();
+    const { token } = await CreateSession();
     await createActivity();
     const response = await agent
       .get("/activities")
-      .set("authorization", `Bearer ${session.token}`);
+      .set("authorization", `Bearer ${token}`);
     expect(response.status).toEqual(httpStatus.OK);
   });
 
   it("should return all different activities dates", async () => {
-    const { session } = await CreateSession();
+    const { token } = await CreateSession();
     await createActivity();
 
     const diffActivities = await Activity.createQueryBuilder("activities")
@@ -53,7 +53,7 @@ describe("GET /activities", () => {
 
     const response = await agent
       .get("/activities")
-      .set("authorization", `Bearer ${session.token}`);
+      .set("authorization", `Bearer ${token}`);
     expect(response.body).toEqual(diffActivities);
   });
 });
@@ -70,36 +70,36 @@ describe.only("POST /activities", () => {
   });
 
   it("should return status 200", async () => {
-    const { session } = await CreateSession();
+    const { token } = await CreateSession();
     const activities = await createActivity();
     const body = { date: activities[0].date };
     const response = await agent
       .post("/activities")
       .send(body)
-      .set("authorization", `Bearer ${session.token}`);
+      .set("authorization", `Bearer ${token}`);
     expect(response.status).toEqual(httpStatus.OK);
   });
 
   it("should return status 422 for invalid params", async () => {
-    const { session } = await CreateSession();
+    const { token } = await CreateSession();
     await createActivity();
     const body = { date: "" };
     const response = await agent
       .post("/activities")
       .send(body)
-      .set("authorization", `Bearer ${session.token}`);
+      .set("authorization", `Bearer ${token}`);
     expect(response.status).toEqual(httpStatus.UNPROCESSABLE_ENTITY);
   });
 
   it("should return all activities by date", async () => {
-    const { session } = await CreateSession();
+    const { token } = await CreateSession();
     const activities = await createActivity();
     const body = { date: activities[0].date };
 
     const response = await agent
       .post("/activities")
       .send(body)
-      .set("authorization", `Bearer ${session.token}`);
+      .set("authorization", `Bearer ${token}`);
 
     const allActivities = await Activity.createQueryBuilder("activities")
       .select()

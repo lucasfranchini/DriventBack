@@ -6,12 +6,11 @@ import { clearDatabase, endConnection } from "../utils/database";
 import { createBasicSettings } from "../utils/app";
 import { CreateSession } from "../factories/userFactory";
 import { createHotel } from "../factories/hotelFactory";
-import  Session  from "../../src/entities/Session";
 import  User  from "../../src/entities/User";
 
 const agent =  supertest(app);
 let userData: {
-  session: Session;
+  token: string;
   user: User;
 }; 
 beforeAll(async () => {
@@ -36,7 +35,7 @@ describe("GET /hotels", () => {
   });
   it("should return an array with all hotels for valid token", async () => {
     const hotel = await createHotel();
-    const response = await agent.get("/hotels").set("authorization", `Bearer ${userData.session.token}`);
+    const response = await agent.get("/hotels").set("authorization", `Bearer ${userData.token}`);
 
     expect(response.body).toEqual(expect.arrayContaining([{
       ...hotel,
@@ -46,7 +45,7 @@ describe("GET /hotels", () => {
   });
   it("should return status 200 for valid token", async () => {
     await createHotel();
-    const response = await agent.get("/hotels").set("authorization", `Bearer ${userData.session.token}`);
+    const response = await agent.get("/hotels").set("authorization", `Bearer ${userData.token}`);
     expect(response.statusCode).toEqual(httpStatus.OK);
   });
 });
@@ -58,13 +57,13 @@ describe("GET /hotels/:id", () => {
   });
   it("should return an array with all hotels for valid token", async () => {
     const hotel = await createHotel();
-    const response = await agent.get(`/hotels/${hotel.id}`).set("authorization", `Bearer ${userData.session.token}`);
+    const response = await agent.get(`/hotels/${hotel.id}`).set("authorization", `Bearer ${userData.token}`);
 
     expect(response.body).toEqual(hotel);
   });
   it("should return status 200 for valid token", async () => {
     const hotel = await createHotel();
-    const response = await agent.get(`/hotels/${hotel.id}`).set("authorization", `Bearer ${userData.session.token}`);
+    const response = await agent.get(`/hotels/${hotel.id}`).set("authorization", `Bearer ${userData.token}`);
     expect(response.statusCode).toEqual(httpStatus.OK);
   });
 });
