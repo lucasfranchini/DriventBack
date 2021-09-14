@@ -22,7 +22,6 @@ app.get("/health", (_req, res) => {
 
 app.use(router);
 app.use(errorHandlingMiddleware);
-
 client.on("error", errorHandlingMiddleware);
 
 export async function init() {
