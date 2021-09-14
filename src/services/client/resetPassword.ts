@@ -1,6 +1,7 @@
 import User from "@/entities/User";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import sgMail from "@sendgrid/mail";
+import InvalidTokenError from "@/errors/InvalidTokenError";
 
 export async function sendToken(email: string) {
   await User.verifyEmail(email);
@@ -18,10 +19,15 @@ export async function sendToken(email: string) {
 }
 
 export async function verifyTokenValidation(token: string) {
-  const { email } = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
-  console.log(token);
+  let email: string;
+  try{
+    const jwtVerified = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+    email= jwtVerified.email;
+  }
+  catch{
+    throw new InvalidTokenError();
+  }
   await User.verifyEmail(email);
-  return false;
 }
 
 export async function resetPassword() {
