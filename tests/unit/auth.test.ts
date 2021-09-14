@@ -18,6 +18,7 @@ describe("signIn", () => {
   it("thorws an error for unauthorized user", async () => {
     jest.spyOn(User, "findByEmailAndPassword").mockImplementationOnce(async () => {return { email: "test", id: 1 }  as User;});
     jest.spyOn(jwt, "sign").mockImplementationOnce(() => "funcionou");
+    jest.spyOn(client, "set").mockImplementationOnce(() => {return true} );
     const result = await signIn("", "");
     
     expect(result).toMatchObject({
