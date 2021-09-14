@@ -11,6 +11,7 @@ import EmailNotAvailableError from "@/errors/EmailNotAvailable";
 import HotelReservation from "@/entities/HotelReservation";
 import Booking from "./Booking";
 import Activity_User from "./Activity_User";
+import InvalidEmailError from "@/errors/InvalidEmail";
 
 @Entity("users")
 export default class User extends BaseEntity {
@@ -67,5 +68,10 @@ export default class User extends BaseEntity {
     }
 
     return null;
+  }
+
+  static async verifyEmail(email: string) {
+    const user = await this.findOne({ email });
+    if(!user) throw new InvalidEmailError(email);
   }
 }
