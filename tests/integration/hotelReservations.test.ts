@@ -8,7 +8,7 @@ import { CreateSession } from "../factories/userFactory";
 import { createHotel, createRoom } from "../factories/hotelFactory";
 import { ReserveHotelRoom } from "../../src/services/client/hotelReservation";
 import Room from "../../src/entities/Room";
-import { createBooking, createDataAndReturnToken } from "../factories/bookingFactory";
+import { createBooking, createData } from "../factories/bookingFactory";
 import  Session  from "../../src/entities/Session";
 import Hotel from "../../src/entities/Hotel";
 import User from "../../src/entities/User";
@@ -36,7 +36,7 @@ beforeEach(async () => {
   await clearDatabase();
   await createBasicSettings();
   userData = await CreateSession();
-  data = await createDataAndReturnToken();
+  data = await createData();
 });
 
 afterAll(async () => {

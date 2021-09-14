@@ -21,6 +21,6 @@ export async function getActivitiesByDates(req: Request, res: Response) {
 export async function subscribe(req: Request, res: Response) {
   const activityId = Number(req.params.id);
   const userId = req.user.id;
-  const result = await activityService.subscribe(userId, activityId);
+  await activityService.subscribe(userId, activityId);
   return res.sendStatus(httpStatus.CREATED);
 }

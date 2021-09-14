@@ -7,6 +7,7 @@ import { createBasicSettings } from "../utils/app";
 import { CreateSession } from "../factories/userFactory";
 import { createActivity } from "../factories/activityFactory";
 import Activity from "../../src/entities/Activity";
+import { Any } from "typeorm";
 
 const agent = supertest(app);
 
@@ -44,8 +45,7 @@ describe("GET /activities", () => {
   it("should return all different activities dates", async () => {
     const { session } = await CreateSession();
     await createActivity();
-
-    const diffActivities = await Activity.createQueryBuilder("activities")
+    let diffActivities = await Activity.createQueryBuilder("activities")
       .select("date")
       .distinct(true)
       .orderBy("date", "ASC")
@@ -54,11 +54,14 @@ describe("GET /activities", () => {
     const response = await agent
       .get("/activities")
       .set("authorization", `Bearer ${session.token}`);
-    expect(response.body).toEqual(diffActivities);
+    diffActivities = diffActivities.map(a => a.date);
+    const result = (response.body).map((d: { date: string | number | Date; }) => d.date = new Date(d.date));
+
+    expect(result).toEqual(diffActivities);
   });
 });
 
-describe.only("POST /activities", () => {
+describe("POST /activities", () => {
   it("should return status 401 for invalid token", async () => {
     const activities = await createActivity();
     const body = { date: activities[0].date };
@@ -102,7 +105,7 @@ describe.only("POST /activities", () => {
 
     const allActivities = await Activity.createQueryBuilder("activities")
       .select()
-      .where(new Date(activities[0].date))
+      .where("activities.date = :date", { date: new Date(activities[0].date) })
       .getRawMany();
     expect(response.body.activities.length).toEqual(allActivities.length);
   });
