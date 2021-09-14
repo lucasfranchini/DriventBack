@@ -21,12 +21,19 @@ export default class Hotel extends BaseEntity {
   @OneToMany(() => HotelReservation, hotelReservations => hotelReservations.hotel)
   hotelReservations: HotelReservation[];
 
-  static async getRoomsOrdered(id: number) {
+  static async getOneWithRoomsOrdered(id: number) {
     return await this.createQueryBuilder("hotel")
       .leftJoinAndSelect("hotel.rooms", "rooms")
       .where("hotel.id = :id", { id })
       .orderBy("rooms.id", "ASC")
       .getOne();
+  }
+
+  static async getManyWithRoomsOrdered() {
+    return await this.createQueryBuilder("hotel")
+      .leftJoinAndSelect("hotel.rooms", "rooms")
+      .orderBy("rooms.id", "ASC")
+      .getMany();
   }
 
   static async getWithSpecifiedRoomAndSpecifiedReservation(hotelId: number, roomId: number, userId: number) {

@@ -7,13 +7,13 @@ import BookingData from "../../src/interfaces/booking";
 
 export async function truncateBookingTable() {
   const connection = getConnection();
-  await connection.query("TRUNCATE bookings RESTART IDENTITY");
+  await connection.query("TRUNCATE bookings RESTART IDENTITY CASCADE");
 }
 
 export async function truncateTables() {
   const connection = getConnection();
   await connection.query(
-    "TRUNCATE bookings, sessions, users, modalities, lodges RESTART IDENTITY"
+    "TRUNCATE bookings, sessions, users, modalities, lodges RESTART IDENTITY CASCADE"
   );
 }
 
