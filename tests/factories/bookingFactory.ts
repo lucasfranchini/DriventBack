@@ -13,12 +13,12 @@ export async function truncateBookingTable() {
 export async function truncateTables() {
   const connection = getConnection();
   await connection.query(
-    "TRUNCATE bookings, users, modalities, lodges RESTART IDENTITY CASCADE"
+    "TRUNCATE bookings, sessions, users, modalities, lodges RESTART IDENTITY CASCADE"
   );
 }
 
-export async function createDataAndReturnToken() {
-  const token = await (await CreateSession()).token;
+export async function createData() {
+  const session =  await CreateSession();
   const modalityResult = await Modality.insert([
     { type: "Presencial", price: 250 },
     { type: "Online", price: 100 },
@@ -31,7 +31,7 @@ export async function createDataAndReturnToken() {
     { type: "Sem Hotel", price: 0 },
   ]);
   return {
-    token,
+    token: session.token,
     modalityIds: (modalityResult.identifiers as unknown[]) as number[],
     lodgeIds: (lodgeResult.identifiers as unknown[]) as number[]
   };

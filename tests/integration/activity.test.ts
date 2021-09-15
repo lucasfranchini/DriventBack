@@ -44,8 +44,7 @@ describe("GET /activities", () => {
   it("should return all different activities dates", async () => {
     const { token } = await CreateSession();
     await createActivity();
-
-    const diffActivities = await Activity.createQueryBuilder("activities")
+    let diffActivities = await Activity.createQueryBuilder("activities")
       .select("date")
       .distinct(true)
       .orderBy("date", "ASC")
@@ -54,11 +53,14 @@ describe("GET /activities", () => {
     const response = await agent
       .get("/activities")
       .set("authorization", `Bearer ${token}`);
-    expect(response.body).toEqual(diffActivities);
+    diffActivities = diffActivities.map(a => a.date);
+    const result = (response.body).map((d: { date: string | number | Date; }) => d.date = new Date(d.date));
+
+    expect(result).toEqual(diffActivities);
   });
 });
 
-describe.only("POST /activities", () => {
+describe("POST /activities", () => {
   it("should return status 401 for invalid token", async () => {
     const activities = await createActivity();
     const body = { date: activities[0].date };
@@ -95,7 +97,6 @@ describe.only("POST /activities", () => {
     const { token } = await CreateSession();
     const activities = await createActivity();
     const body = { date: activities[0].date };
-
     const response = await agent
       .post("/activities")
       .send(body)
@@ -103,9 +104,32 @@ describe.only("POST /activities", () => {
 
     const allActivities = await Activity.createQueryBuilder("activities")
       .select()
-      .where(new Date(activities[0].date))
+      .where("activities.date = :date", { date: new Date(activities[0].date) })
       .getRawMany();
+    expect(response.body.activities.length).toEqual(allActivities.length);
+  });
+});
 
-    expect(response.body.length).toEqual(allActivities.length);
+describe("POST /activities/seat", () => {
+  it("should decrement remaining seats for correct params and auth", async () => {
+    const { token } = await CreateSession();
+    await createActivity();
+    const activity = await Activity.findOne();
+    await agent
+      .post("/activities/seat")
+      .send({ id: activity.id } )
+      .set("authorization", `Bearer ${token}`);
+    const activityAfter = await Activity.findOne({ where: { id: activity.id } });
+    expect(activityAfter.remaining_seats).toEqual(activity.remaining_seats-1);
+  });
+
+  it("should return 401 for invalid auth", async () => {
+    await createActivity();
+    const activity = await Activity.findOne();
+    const response = await agent
+      .post("/activities/seat")
+      .send({ id: activity.id })
+      .set("authorization", "Bearer invalid_token");
+    expect(response.status).toEqual(401);
   });
 });

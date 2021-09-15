@@ -1,6 +1,5 @@
 import supertest from "supertest";
 import httpStatus from "http-status";
-
 import app, { init } from "../../src/app";
 import { clearDatabase, endConnection } from "../utils/database";
 import { createBasicSettings } from "../utils/app";
@@ -8,7 +7,7 @@ import { CreateSession } from "../factories/userFactory";
 import { createHotel } from "../factories/hotelFactory";
 import { ReserveHotelRoom } from "../../src/services/client/hotelReservation";
 import Room from "../../src/entities/Room";
-import { createBooking, createDataAndReturnToken } from "../factories/bookingFactory";
+import { createBooking, createData } from "../factories/bookingFactory";
 import Hotel from "../../src/entities/Hotel";
 import User from "../../src/entities/User";
 
@@ -35,7 +34,7 @@ beforeEach(async () => {
   await clearDatabase();
   await createBasicSettings();
   userData = await CreateSession();
-  data = await createDataAndReturnToken();
+  data = await createData();
 });
 
 afterAll(async () => {
