@@ -51,9 +51,12 @@ export default class Activity extends BaseEntity {
   }
 
   static async getActivityByDate(date: Date) {
-    const activities = await this.find({
-      where: { date },
-    });
+    const activities = await this.createQueryBuilder("activities")
+      .where("activities.date = :date", { date })
+      .getMany();
+    
+    activities.sort((a, b) => (Number(a.start_hour.replace(":", "")) > Number(b.start_hour.replace(":", "")) ? 1 : -1));
+
     return activities;
   }
 

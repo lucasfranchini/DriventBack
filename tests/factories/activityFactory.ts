@@ -5,7 +5,7 @@ export async function createActivity() {
   const locations = await createLocation(3);
 
   const activities = [
-    {
+    { 
       date: "2021-09-28 00:00:00",
       title: "Bootbar",
       start_hour: "9:00",

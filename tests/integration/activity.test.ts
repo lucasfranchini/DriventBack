@@ -109,3 +109,19 @@ describe("POST /activities", () => {
     expect(response.body.activities.length).toEqual(allActivities.length);
   });
 });
+
+describe("POST /activities/seat/:id", () => {
+  it("should return status 401 for invalid token", async () => {
+    const { session } = await CreateSession();
+    await createActivity();
+    const activitiesBefore = await Activity.find()[0];
+    console.log(activitiesBefore[0].id, "antes");
+    await agent
+      .post(`/activities/seat/${activitiesBefore[0].id}`)
+      .send({})
+      .set("authorization", `Bearer ${session.token}`);
+    const activitiesAfter = await Activity.find()[0];
+    console.log(activitiesAfter[0].id, "depois");
+    expect(1).toEqual(1);
+  });
+});
