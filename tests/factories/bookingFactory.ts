@@ -31,7 +31,7 @@ export async function createData() {
     { type: "Sem Hotel", price: 0 },
   ]);
   return {
-    token: session.session.token,
+    token: session.token,
     modalityIds: (modalityResult.identifiers as unknown[]) as number[],
     lodgeIds: (lodgeResult.identifiers as unknown[]) as number[]
   };
