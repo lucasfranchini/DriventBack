@@ -31,7 +31,7 @@ export async function verifyTokenValidation(token: string) {
 }
 
 export async function resetPassword(token: string, newPassword: string) {
-  const email =await verifyTokenValidation(token);
+  const email = await verifyTokenValidation(token);
   const user = await User.verifyEmail(email);
   await user.changePassword(newPassword);
 }
