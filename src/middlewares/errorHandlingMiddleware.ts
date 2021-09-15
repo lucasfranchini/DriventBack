@@ -9,10 +9,16 @@ import UnauthorizedError from "@/errors/Unauthorized";
 import NotFoundError from "@/errors/NotFoundError";
 import UnprocessableEntity from "@/errors/UnprocessableEntity";
 import InvalidBookingError from "@/errors/InvalidBooking";
+import InvalidTokenError from "@/errors/InvalidTokenError";
 
 /* eslint-disable-next-line */
 export default function errorHandlingMiddleware(err: Error,_req: Request,res: Response,_next: NextFunction) {
   if (err instanceof InvalidEmailError) {
+    return res.status(httpStatus.BAD_REQUEST).send({
+      message: err.message,
+    });
+  }
+  if (err instanceof InvalidTokenError) {
     return res.status(httpStatus.BAD_REQUEST).send({
       message: err.message,
     });
