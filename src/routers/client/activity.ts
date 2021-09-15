@@ -5,6 +5,7 @@ import * as controller from "@/controllers/client/activity";
 import schemaValidatingMiddleware from "@/middlewares/schemaValidatingMiddleware";
 
 import activitySchema from "@/schemas/activitySchema";
+import seatSchema from "@/schemas/seatSchema";
 
 const router = Router();
 
@@ -15,7 +16,8 @@ router.post(
   controller.getActivitiesByDates
 );
 router.post(
-  "/seat/:id",
+  "/seat",
+  schemaValidatingMiddleware(seatSchema),
   controller.subscribe
 );
 

@@ -9,6 +9,7 @@ import {
 import Location from "./Location";
 import Activity_User from "./Activity_User";
 import UnprocessableEntity from "@/errors/UnprocessableEntity";
+import ConflictError from "@/errors/ConflictError";
 
 @Entity("activities")
 export default class Activity extends BaseEntity {
@@ -21,7 +22,7 @@ export default class Activity extends BaseEntity {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ type: "time" })
   start_hour: string;
 
   @Column()
@@ -51,10 +52,28 @@ export default class Activity extends BaseEntity {
   }
 
   static async getActivityByDate(date: Date) {
-    const activities = await this.find({ where: { date } });
-    activities.sort((a, b) => (Number(a.start_hour.replace(":", "")) > Number(b.start_hour.replace(":", "")) ? 1 : -1));
+    const activities = await this.createQueryBuilder("activities")
+      .where("activities.date = :date", { date })
+      .orderBy("start_hour", "ASC")
+      .getMany();
 
     return activities;
+  }
+
+  static checkConflict(activitiesArr: Activity_User[], activity: Activity) {
+    for (let i = 0; i < activitiesArr.length; i++) {
+      const current = activitiesArr[i];
+      if (String(current.activities.date) === String(activity.date)) {
+        if (
+          (current.activities.start_hour >= activity.start_hour && current.activities.start_hour < activity.end_hour) ||
+          (current.activities.end_hour >= activity.start_hour && current.activities.end_hour <= activity.end_hour) ||
+          (current.activities.start_hour <= activity.start_hour && current.activities.end_hour >= activity.end_hour)||
+          (current.activities.start_hour >= activity.start_hour && current.activities.end_hour <= activity.end_hour)
+        ) {
+          throw new ConflictError("O usuário já está inscrito em uma atividade nesse horário");
+        } 
+      } 
+    }
   }
 
   static async subscribe(userId: number, activityId: number) {
@@ -65,6 +84,8 @@ export default class Activity extends BaseEntity {
     if (!activity) throw new UnprocessableEntity("Atividade não existente.");
     if (activity.remaining_seats === 0 ) throw new UnprocessableEntity("A atividade já está cheia.");
     if (userInstance) throw new UnprocessableEntity("O usuário já está cadastrado nessa atividade");
+    const allUserActivities = await Activity_User.find({ where: { userId }, relations: ["activities"] });
+    this.checkConflict(allUserActivities, activity);
     activity.remaining_seats -= 1;
     await activity.save();
     await Activity_User.insert({ userId, activitiesId: activityId } );

@@ -1,4 +1,5 @@
 import Activity from "../../src/entities/Activity";
+import Activity_User from "../../src/entities/Activity_User";
 import { createLocation } from "./loationFactory";
 
 export async function createActivity() {
@@ -53,3 +54,4 @@ export async function createActivity() {
 
   return activities;
 }
+

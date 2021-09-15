@@ -96,7 +96,7 @@ describe("POST /bookings", () => {
   });
 
   it("should return 409 for alreay registered user", async () => {
-    const data = (await createData());
+    const data = await createData();
     const body = { modalityId: 1, lodgeId: 1, value: 600 };
     await agent
       .post("/bookings")

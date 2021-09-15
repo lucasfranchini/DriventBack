@@ -3,7 +3,7 @@ seeds:
       id: 1
       date: "2021-09-28 00:00:00"
       title: "Bootbar"
-      start_hour: "9:00"
+      start_hour: "09:00"
       end_hour: "12:00"
       remaining_seats: 15
       locationId: 3
@@ -31,3 +31,27 @@ seeds:
       end_hour: "11:00"
       remaining_seats: 13
       locationId: 1
+  - Activity:
+      id: 5
+      date: "2021-09-28 00:00:00"
+      title: "Bootbar 5"
+      start_hour: "09:00"
+      end_hour: "12:00"
+      remaining_seats: 15
+      locationId: 3
+  - Activity:
+      id: 6
+      date: "2021-09-28 00:00:00"
+      title: "Bootbar 6"
+      start_hour: "02:00"
+      end_hour: "15:00"
+      remaining_seats: 15
+      locationId: 3
+  - Activity:
+      id: 7
+      date: "2021-09-28 00:00:00"
+      title: "Bootbar 7"
+      start_hour: "19:00"
+      end_hour: "20:00"
+      remaining_seats: 15
+      locationId: 3

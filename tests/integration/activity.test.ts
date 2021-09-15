@@ -110,13 +110,14 @@ describe("POST /activities", () => {
   });
 });
 
-describe("POST /activities/seat/:id", () => {
+describe("POST /activities/seat", () => {
   it("should decrement remaining seats for correct params and auth", async () => {
     const { token } = await CreateSession();
     await createActivity();
     const activity = await Activity.findOne();
     await agent
-      .post(`/activities/seat/${activity.id}`)
+      .post("/activities/seat")
+      .send({ id: activity.id } )
       .set("authorization", `Bearer ${token}`);
     const activityAfter = await Activity.findOne({ where: { id: activity.id } });
     expect(activityAfter.remaining_seats).toEqual(activity.remaining_seats-1);
@@ -126,7 +127,8 @@ describe("POST /activities/seat/:id", () => {
     await createActivity();
     const activity = await Activity.findOne();
     const response = await agent
-      .post(`/activities/seat/${activity.id}`)
+      .post("/activities/seat")
+      .send({ id: activity.id })
       .set("authorization", "Bearer invalid_token");
     expect(response.status).toEqual(401);
   });

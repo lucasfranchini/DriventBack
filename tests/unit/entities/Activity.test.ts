@@ -7,6 +7,7 @@ jest.mock("typeorm", () => {
     BaseEntity: class MockedBaseEntity {
       static async findOne() {undefined;}
       static async insert() {undefined;}
+      static async find() {undefined;}
       async save() {undefined;}
     },
     Entity: () => {undefined;},
