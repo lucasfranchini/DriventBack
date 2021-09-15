@@ -25,13 +25,13 @@ describe("Activity.subscribe", () => {
     await expect(asyncFunction).rejects.toThrow(UnprocessableEntity);
   });
 
-  it("should throw 422 for no remaining seats", async () => {
+  it("should throw 422 for already signed user", async () => {
     jest.spyOn(Activity_User, "findOne").mockImplementationOnce(async () => ({ }) as Activity);
     const asyncFunction = () => Activity.subscribe(1, 1);
     await expect(asyncFunction).rejects.toThrow(UnprocessableEntity);
   });
 
-  it("should throw 422 for no remaining seats", async () => {
+  it("should throw 422 for no existing activity", async () => {
     jest.spyOn(Activity_User, "findOne").mockImplementationOnce(async () => (undefined));
     const asyncFunction = () => Activity.subscribe(1, 1);
     await expect(asyncFunction).rejects.toThrow(UnprocessableEntity);

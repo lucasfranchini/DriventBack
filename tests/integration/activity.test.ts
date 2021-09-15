@@ -111,17 +111,23 @@ describe("POST /activities", () => {
 });
 
 describe("POST /activities/seat/:id", () => {
-  it("should return status 401 for invalid token", async () => {
+  it("should decrement remaining seats for correct params and auth", async () => {
     const { session } = await CreateSession();
     await createActivity();
-    const activitiesBefore = await Activity.find()[0];
-    console.log(activitiesBefore[0].id, "antes");
+    const activity = await Activity.findOne();
     await agent
-      .post(`/activities/seat/${activitiesBefore[0].id}`)
-      .send({})
+      .post(`/activities/seat/${activity.id}`)
       .set("authorization", `Bearer ${session.token}`);
-    const activitiesAfter = await Activity.find()[0];
-    console.log(activitiesAfter[0].id, "depois");
-    expect(1).toEqual(1);
+    const activityAfter = await Activity.findOne({ where: { id: activity.id } });
+    expect(activityAfter.remaining_seats).toEqual(activity.remaining_seats-1);
+  });
+
+  it("should return 401 for invalid auth", async () => {
+    await createActivity();
+    const activity = await Activity.findOne();
+    const response = await agent
+      .post(`/activities/seat/${activity.id}`)
+      .set("authorization", "Bearer invalid_token");
+    expect(response.status).toEqual(401);
   });
 });
