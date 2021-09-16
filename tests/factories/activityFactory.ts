@@ -55,3 +55,7 @@ export async function createActivity() {
   return activities;
 }
 
+export async function createUserActvityRelationship(userId: number, activitiesId: number) {
+  await Activity_User.insert({ userId, activitiesId });
+}
+

@@ -126,7 +126,7 @@ describe("PUT /bookings", () => {
     const body = { id: 1, userId: 1, modalityId: 1, lodgeId: 1, value: 500 };
     const bookingBeingPaid = await createBooking(body);
     bookingBeingPaid.isPaid = true;
-    bookingBeingPaid.save();
+    await bookingBeingPaid.save();
     const response = await agent
       .put("/bookings")
       .set("authorization", `Bearer ${data.token}`);

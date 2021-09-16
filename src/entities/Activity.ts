@@ -53,6 +53,7 @@ export default class Activity extends BaseEntity {
 
   static async getActivityByDate(date: Date) {
     const activities = await this.createQueryBuilder("activities")
+      .leftJoinAndSelect("activities.location", "location")
       .where("activities.date = :date", { date })
       .orderBy("start_hour", "ASC")
       .getMany();

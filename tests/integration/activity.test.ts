@@ -5,8 +5,9 @@ import app, { init } from "../../src/app";
 import { clearDatabase, endConnection } from "../utils/database";
 import { createBasicSettings } from "../utils/app";
 import { CreateSession } from "../factories/userFactory";
-import { createActivity } from "../factories/activityFactory";
+import { createActivity, createUserActvityRelationship } from "../factories/activityFactory";
 import Activity from "../../src/entities/Activity";
+import Activity_User from "../../src/entities/Activity_User";
 
 const agent = supertest(app);
 
@@ -131,5 +132,17 @@ describe("POST /activities/seat", () => {
       .send({ id: activity.id })
       .set("authorization", "Bearer invalid_token");
     expect(response.status).toEqual(401);
+  });
+
+  it("should return 409 for conflicting activities", async () => {
+    const { token, user } = await CreateSession();
+    await createActivity();
+    const activities = await Activity.find({ where: { date: "2021-09-27 00:00:00", start_hour: "9:00" } });
+    await createUserActvityRelationship(user.id, activities[0].id);
+    const response = await agent
+      .post("/activities/seat")
+      .send({ id: activities[1].id } )
+      .set("authorization", `Bearer ${token}`);
+    expect(response.status).toEqual(409);
   });
 });
