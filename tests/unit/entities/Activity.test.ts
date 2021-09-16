@@ -40,9 +40,4 @@ describe("Activity.subscribe", () => {
     await expect(asyncFunction).rejects.toThrow(UnprocessableEntity);
   });
 });
-describe("Activity.checkConflict", () => {
-  it("should throw 409 for conflicting activity", async () => {
-    const asyncFunction = () => Activity.checkConflict([{ activities: {} }] as Activity_User[], {} as Activity);
-    await expect(asyncFunction).rejects.toThrow(ConflictError);
-  });
-});
+
