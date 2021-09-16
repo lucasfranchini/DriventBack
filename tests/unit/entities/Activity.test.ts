@@ -1,21 +1,22 @@
 import Activity from "../../../src/entities/Activity";
 import Activity_User from "../../../src/entities/Activity_User";
 import UnprocessableEntity from "../../../src/errors/UnprocessableEntity";
+/* eslint-disable @typescript-eslint/no-empty-function */
 
 jest.mock("typeorm", () => {
   return {
     BaseEntity: class MockedBaseEntity {
-      static async findOne() {undefined;}
-      static async insert() {undefined;}
-      static async find() {undefined;}
-      async save() {undefined;}
+      static async findOne() {}
+      static async insert() {}
+      static async find() {}
+      async save() {}
     },
-    Entity: () => {undefined;},
-    PrimaryGeneratedColumn: () => {undefined;},
-    Column: () => {undefined;},
-    OneToMany: () => {undefined;},
-    ManyToOne: () => {undefined;},
-    OneToOne: () => {undefined;}
+    Entity: () => {},
+    PrimaryGeneratedColumn: () => {},
+    Column: () => {},
+    OneToMany: () => {},
+    ManyToOne: () => {},
+    OneToOne: () => {}
   };
 });
 
