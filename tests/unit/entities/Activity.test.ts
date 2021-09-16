@@ -1,6 +1,7 @@
 import Activity from "../../../src/entities/Activity";
 import Activity_User from "../../../src/entities/Activity_User";
 import UnprocessableEntity from "../../../src/errors/UnprocessableEntity";
+import ConflictError from "../../../src/errors/ConflictError";
 /* eslint-disable @typescript-eslint/no-empty-function */
 
 jest.mock("typeorm", () => {
@@ -37,5 +38,11 @@ describe("Activity.subscribe", () => {
     jest.spyOn(Activity_User, "findOne").mockImplementationOnce(async () => (undefined));
     const asyncFunction = () => Activity.subscribe(1, 1);
     await expect(asyncFunction).rejects.toThrow(UnprocessableEntity);
+  });
+});
+describe("Activity.checkConflict", () => {
+  it("should throw 409 for conflicting activity", async () => {
+    const asyncFunction = () => Activity.checkConflict([{ activities: {} }] as Activity_User[], {} as Activity);
+    await expect(asyncFunction).rejects.toThrow(ConflictError);
   });
 });
