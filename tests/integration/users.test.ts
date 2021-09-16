@@ -77,5 +77,40 @@ describe("POST /users", () => {
 
     const usersDatabase = await User.find({ email: userData.email });
     expect(usersDatabase.length).toEqual(0);
+  });  
+});
+
+describe("POST /users/picture", () => {
+  it("should save the user picture for a valid request", async () => {
+    const user = await createUser();
+    const pictureData = {
+      userId: user.id,
+      url: faker.internet.url()
+    };
+    const response = await agent.post("/users/picture").send( pictureData );
+
+    expect(response.statusCode).toEqual(httpStatus.CREATED);
   });
+
+  it("shouldn't update user picture for invalid user id", async () => {
+    await createUser();
+    const pictureData = {
+      userId: 2,
+      url: faker.internet.url()
+    };
+
+    const response = await agent.post("/users/picture").send( pictureData );
+
+    expect(response.statusCode).toEqual(httpStatus.UNAUTHORIZED);
+  });
+
+  it("shouldn't update user picture for invalid picture url", async () => {
+    const user = await createUser();
+    const pictureData = {
+      userId: 1,
+      url: ""
+    };
+    const response = await agent.post("/users/picture").send( pictureData );
+    expect(response.statusCode).toEqual(httpStatus.UNPROCESSABLE_ENTITY);
+  });  
 });

@@ -11,6 +11,8 @@ import EmailNotAvailableError from "@/errors/EmailNotAvailable";
 import HotelReservation from "@/entities/HotelReservation";
 import Booking from "./Booking";
 import Activity_User from "./Activity_User";
+import Unauthorized from "@/errors/Unauthorized";
+import InvalidData from "@/errors/InvalidData";
 
 @Entity("users")
 export default class User extends BaseEntity {
@@ -25,6 +27,9 @@ export default class User extends BaseEntity {
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
+
+  @Column({ nullable: true })
+  pictureUrl: string;
 
   @OneToOne(() => HotelReservation, (hotelReservation) => hotelReservation.user)
   hotelReservation: HotelReservation;
@@ -67,5 +72,15 @@ export default class User extends BaseEntity {
     }
 
     return null;
+  }
+
+  static async addPicture(picture: string, userId: number) {
+    const user = await this.findOne( { where: { id: userId } } ); 
+    if(!user) throw new Unauthorized();
+    if(!picture || picture === "") throw new InvalidData("Foto", ["url vazia"]);
+    user.pictureUrl = picture;
+    await user.save();  
+
+    return user;
   }
 }

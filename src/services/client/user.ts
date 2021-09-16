@@ -10,7 +10,16 @@ export async function createNewUser(email: string, password: string) {
   if (dayjs().isBefore(dayjs(settings.startDate))) {
     throw new CannotEnrollBeforeStartDateError();
   }
-
   const user = await User.createNew(email, password);
   return user;
+}
+
+export async function saveProfilePicture(picture: string, userId: number) {
+  const settings = await Setting.getEventSettings();
+
+  if (dayjs().isBefore(dayjs(settings.startDate))) {
+    throw new CannotEnrollBeforeStartDateError();
+  }
+  const pictureUrl = await User.addPicture(picture, userId);
+  return pictureUrl;
 }
