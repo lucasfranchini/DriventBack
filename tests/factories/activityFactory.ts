@@ -1,11 +1,12 @@
 import Activity from "../../src/entities/Activity";
+import Activity_User from "../../src/entities/Activity_User";
 import { createLocation } from "./loationFactory";
 
 export async function createActivity() {
   const locations = await createLocation(3);
 
   const activities = [
-    {
+    { 
       date: "2021-09-28 00:00:00",
       title: "Bootbar",
       start_hour: "9:00",
@@ -48,8 +49,9 @@ export async function createActivity() {
   ];
 
   for (let i = 0; i < activities.length; i++) {
-    Activity.create(activities[i]);
+    await Activity.insert(activities[i]);
   }
 
   return activities;
 }
+

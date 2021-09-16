@@ -13,6 +13,7 @@ import Booking from "./Booking";
 import Activity_User from "./Activity_User";
 import Unauthorized from "@/errors/Unauthorized";
 import InvalidData from "@/errors/InvalidData";
+import InvalidEmailError from "@/errors/InvalidEmail";
 
 @Entity("users")
 export default class User extends BaseEntity {
@@ -52,6 +53,11 @@ export default class User extends BaseEntity {
     return newUser;
   }
 
+  async changePassword(newPassword: string) {
+    this.password = User.hashPassword(newPassword);
+    await this.save();
+  }
+
   static hashPassword(password: string) {
     return bcrypt.hashSync(password, 12);
   }
@@ -79,8 +85,12 @@ export default class User extends BaseEntity {
     if(!user) throw new Unauthorized();
     if(!picture || picture === "") throw new InvalidData("Foto", ["url vazia"]);
     user.pictureUrl = picture;
-    await user.save();  
+    await user.save(); 
+  } 
 
+  static async verifyEmail(email: string) {
+    const user = await this.findOne({ email });
+    if(!user) throw new InvalidEmailError(email);
     return user;
   }
 }

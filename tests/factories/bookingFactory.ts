@@ -17,8 +17,8 @@ export async function truncateTables() {
   );
 }
 
-export async function createDataAndReturnToken() {
-  const session = await (await CreateSession()).session;
+export async function createData() {
+  const session =  await CreateSession();
   const modalityResult = await Modality.insert([
     { type: "Presencial", price: 250 },
     { type: "Online", price: 100 },
