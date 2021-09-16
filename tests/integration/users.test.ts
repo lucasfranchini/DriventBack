@@ -105,7 +105,7 @@ describe("POST /users/picture", () => {
   });
 
   it("shouldn't update user picture for invalid picture url", async () => {
-    const user = await createUser();
+    await createUser();
     const pictureData = {
       userId: 1,
       url: ""

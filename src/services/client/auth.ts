@@ -20,7 +20,8 @@ export async function signIn(email: string, password: string) {
   return {
     user: {
       id: user.id,
-      email: user.email
+      email: user.email,
+      picture: user.pictureUrl
     },
 
     token
